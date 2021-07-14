@@ -15,6 +15,7 @@ $ php artisan migrate
 # install key
 $ php artisan passport:install 
 ```
+- You need to enable comment embed: Setting > Comment
 
 ## Usage
 - Insert to your Article with ShortCode:
