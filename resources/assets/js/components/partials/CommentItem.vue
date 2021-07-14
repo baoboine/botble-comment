@@ -1,12 +1,12 @@
 <template>
     <div class="bb-comment-item">
         <div class="d-flex">
-            <avatar></avatar>
+            <avatar :user="comment.user"></avatar>
 
             <div class="bb-comment-content w-100">
                 <div class="bb-comment-content-user">
                     <strong>{{ comment.user ? comment.user.name : "Guest" }}</strong>
-                    <span class="badge badge-warning">Author</span>
+                    <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
                     <span class="px-2">•</span>
                     <span class="time">{{ comment.time }}</span>
                 </div>
@@ -17,11 +17,12 @@
                     </p>
 
                     <div class="bb-comment-content-actions d-flex flex-wrap align-center">
-                        <a class="reply" @click="replyIt" href="javascript:">Reply</a>
+                        <a class="reply" @click="replyIt" href="javascript:">{{ __('Reply') }}</a>
                         <span>•</span>
-                        <a class="like" href="javascript:">
-                            <i class="fas fa-thumbs-up"></i>
+                        <a class="bb-like" :class="{'ok': comment.liked}" href="javascript:" @click="onLike">
+
                         </a>
+                        <span>{{ comment.like_count }}</span>
                     </div>
 
                     <div class="mt-3 mb-4" v-if="showReply">
@@ -42,7 +43,7 @@
                 />
 
 
-                <a class="load-more-replies" href="javascript:" @click="onLoadMore" v-if="comments.length && attrs.current_page < attrs.last_page">Load more replies ({{ attrs.total - comments.length }}) <i class="fas fa-chevron-down"></i></a>
+                <a class="load-more-replies" href="javascript:" @click="onLoadMore" v-if="comments.length && attrs.current_page < attrs.last_page">{{ __('Load more replies') }} ({{ attrs.total - comments.length }}) <i class="fas fa-chevron-down"></i></a>
 
                 <div v-if="comments.length" class="mt-3">
                     <comment-item v-for="(item, index) in comments" :key="item.id" :comment="item" :on-delete-item="() => onDeletedItem(index)"  />
@@ -50,7 +51,7 @@
             </div>
         </div>
 
-        <div class="bb-comment-item-actions">
+        <div class="bb-comment-item-actions" v-if="data.userData && comment.user_id === data.userData.id">
             <a href="javascript:" @click="showEdit = true">
                 <i class="fas fa-edit"></i>
             </a>
@@ -124,14 +125,17 @@ export default {
             this.comment = comment;
         },
         onDelete() {
-            this.showConfirm('Confirm', 'Are you sure that want to delete this comment?', (ok) => {
+            this.showConfirm(this.__('Confirm'), this.__('Are you sure that want to delete this comment?'), (ok) => {
                 if (ok) {
+                    this.setSoftLoading(true);
                     Http.delete(this.deleteUrl, {
                         params: {
                             id: this.comment.id,
                         }
                     }).then(res => {
                         const {data} = res;
+
+                        this.setSoftLoading(false);
 
                         if (!data.error) {
                             this.updateCount(false);
@@ -153,8 +157,19 @@ export default {
                 this.comments = data.data.comments.concat(this.comments);
                 this.attrs = data.data.attrs;
             })
+        },
+        onLike() {
+            this.comment.liked = !this.comment.liked;
+
+            this.comment.like_count += this.comment.liked ? 1 : -1;
+
+            Http.post(this.likeUrl, {
+                id: this.comment.id,
+            }).then(res => {
+
+            })
         }
     },
-    inject: ['data', 'deleteUrl', 'showConfirm', 'updateCount', 'apiLoadComments']
+    inject: ['data', 'deleteUrl', 'showConfirm', 'updateCount', 'apiLoadComments', 'setSoftLoading', 'likeUrl']
 }
 </script>

@@ -3,6 +3,7 @@
 namespace Botble\Comment\Supports;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Guards\TokenGuard;
@@ -21,14 +22,17 @@ class CheckMemberCredentials
         $this->app = $app;
     }
 
-    public function handle()
+    public function handle(Request $request)
     {
-        return (new TokenGuard(
+        $user = (new TokenGuard(
             $this->app->make(ResourceServer::class),
             new PassportUserProvider(Auth::createUserProvider($this->provider), $this->provider),
             $this->app->make(TokenRepository::class),
             $this->app->make(ClientRepository::class),
             $this->app->make('encrypter')
-        ));
+        ))->user($request);
+
+        app('auth')->guard('member')->setUser($user);
+        return $user;
     }
 }

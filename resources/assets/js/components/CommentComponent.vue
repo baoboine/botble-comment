@@ -7,7 +7,7 @@
             <comment-item v-for="(comment, index) in comments" :key="comment.id" :comment="comment" :on-delete-item="() => onDeletedItem(index)" />
 
             <div class="bb-comment-list-empty text-center" v-if="!comments.length">
-                <p>Become the first to comment</p>
+                <p>{{ __('Become the first to comment') }}</p>
             </div>
         </div>
 
@@ -21,7 +21,11 @@
         <login-form :show.sync="showLoginForm" :on-close="closeModalLogin"></login-form>
 
         <div class="bb-comment-footer d-flex justify-content-center" v-if="reactive.attrs">
-            <button v-if="reactive.attrs.last_page > reactive.attrs.current_page" @click="loadMoreComments" :class="'btn btn-secondary' + (isLoadMore ? ' button-loading' : '')">Load More</button>
+            <button v-if="reactive.attrs.last_page > reactive.attrs.current_page" @click="loadMoreComments" :class="'btn btn-secondary' + (isLoadMore ? ' button-loading' : '')">{{ __('Load More') }}</button>
+        </div>
+
+        <div class="bb-comment-loading" v-if="isSoftLoading">
+            <div class="bb-loading mini"></div>
         </div>
     </div>
 </template>
@@ -51,6 +55,7 @@ export default {
             },
             confirmDialogData: null,
             showLoginForm: false,
+            isSoftLoading: false,
         };
     },
     components: {
@@ -64,27 +69,30 @@ export default {
     props: {
         reference: {
             type: String,
-            default: null,
             required: true
         },
         url: {
             type: String,
-            default: null,
             required: true
         },
         postUrl: {
             type: String,
-            default: null,
             required: true
         },
         userUrl: {
             type: String,
-            default: null,
             required: true,
         },
         deleteUrl: {
             type: String,
-            default: null,
+            required: true,
+        },
+        likeUrl: {
+            type: String,
+            required: true,
+        },
+        changeAvatarUrl: {
+            type: String,
             required: true,
         },
         loggedUser: {
@@ -93,13 +101,15 @@ export default {
         checkCurrentUserApi: {
             type: String,
             required: true,
-        }
+        },
     },
     methods: {
         getCurrentUserData() {
             if (Ls.get('auth.token')) {
+                this.setSoftLoading(true);
                 Http.post(this.userUrl).then(res => {
                     this.reactive.userData = res.data.data;
+                    this.setSoftLoading(false)
                 })
             } else {
                 this.reactive.userData = null;
@@ -186,15 +196,23 @@ export default {
             this.loadComments();
         },
         checkCurrentUser(cb) {
+            this.setSoftLoading(true);
             Http.post(this.checkCurrentUserApi)
                 .then(res => {
+                    this.setSoftLoading(false);
                     if (res.data.error) {
                         cb();
                     } else {
                         Ls.set('auth.token', res.data.data.token);
                         this.getCurrentUserData();
                     }
+                }, () => {
+                    this.setSoftLoading(false);
+                    cb();
                 })
+        },
+        setSoftLoading(value = true) {
+            this.isSoftLoading = value;
         }
     },
     mounted: function () {
@@ -208,11 +226,14 @@ export default {
             reference: this.reference,
             postUrl: this.postUrl,
             deleteUrl: this.deleteUrl,
+            likeUrl: this.likeUrl,
             showConfirm: this.showConfirmDialog,
             updateCount: this.updateCount,
             openLoginForm: this.openLoginForm,
             apiLoadComments: this.apiLoadComments,
             onChangeSort: this.onChangeSort,
+            setSoftLoading: this.setSoftLoading,
+            changeAvatarUrl: this.changeAvatarUrl,
         }
     }
 }

@@ -54,7 +54,7 @@ class CommentTable extends TableAbstract
                 if (!Auth::user()->hasPermission('comment.edit')) {
                     return $item->comment;
                 }
-                return Html::link(route('comment.edit', $item->id), $item->comment);
+                return $item->comment;
             })
             ->editColumn('checkbox', function ($item) {
                 return $this->getCheckbox($item->id);
@@ -71,7 +71,7 @@ class CommentTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations('comment.edit', 'comment.destroy', $item);
+                return $this->getOperations(false, 'comment.destroy', $item);
             })
             ->escapeColumns([])
             ->make(true);
@@ -107,7 +107,7 @@ class CommentTable extends TableAbstract
             ],
             'comment' => [
                 'name'  => 'comment',
-                'title' => trans('core/base::tables.name'),
+                'title' => trans('plugins/comment::comment.name'),
                 'class' => 'text-left',
             ],
             'reference' => [

@@ -31,6 +31,9 @@ if (defined('THEME_MODULE_SCREEN_NAME')) {
                 Route::post('postComment', 'CommentFrontController@postComment')->name('post');
                 Route::post('user', 'CommentFrontController@userInfo')->name('user');
                 Route::delete('delete', 'CommentFrontController@deleteComment')->name('delete');
+
+                Route::post('like', 'CommentFrontController@likeComment')->name('like');
+                Route::post('change-avatar', 'CommentFrontController@changeAvatar')->name('update-avatar');
             });
 
             Route::get('getComments', 'CommentFrontController@getComments')->name('list');

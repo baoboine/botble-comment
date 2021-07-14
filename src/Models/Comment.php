@@ -17,6 +17,8 @@ class Comment extends BaseModel
      */
     protected $table = 'comments';
 
+    public static $author;
+
     /**
      * @var array
      */
@@ -42,12 +44,12 @@ class Comment extends BaseModel
     protected $appends = [
         'time',
         'rep',
+        'isAuthor',
+        'liked'
     ];
 
     protected $with = [
         'user',
-//        'replies',
-//        'likes',
     ];
 
     /**
@@ -74,6 +76,9 @@ class Comment extends BaseModel
         return $this->hasMany(Comment::class, 'parent_id', 'id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
     public function reference()
     {
         return $this->morphTo();
@@ -87,11 +92,27 @@ class Comment extends BaseModel
         return $this->created_at->diffForHumans();
     }
 
+    public function getIsAuthorAttribute()
+    {
+        if (self::$author && $this->user) {
+            return $this->original['user_id'] === self::$author->id && $this->user->original['user_type'] === self::$author->type;
+        }
+        return false;
+    }
+
     public function getRepAttribute()
     {
         return (int)$this->reply_count > 0 ? $this->replies()
             ->orderBy('created_at', 'DESC')
             ->paginate(2) : [];
+    }
+
+    public function getLikedAttribute()
+    {
+        if ((int)$this->like_count > 0 && auth()->guard('member')->check()) {
+            return $this->likes()->where(['user_id' => auth()->guard('member')->id()])->exists();
+        }
+        return false;
     }
 
     protected static function boot()

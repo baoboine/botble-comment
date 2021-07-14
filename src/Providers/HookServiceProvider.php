@@ -3,6 +3,7 @@
 
 namespace Botble\Comment\Providers;
 
+use Botble\ACL\Models\User;
 use Illuminate\Support\ServiceProvider;
 use Theme;
 
@@ -30,6 +31,10 @@ class HookServiceProvider extends ServiceProvider
         $reference = $this->getReference();
         $loggedUser = auth()->user() ? request()->user()->only(['id', 'email']) : ['id' => 0];
 
+        add_filter(THEME_FRONT_HEADER, function ($html) {
+            return $html . view('plugins/comment::partials.trans');
+        }, 15);
+
         return $reference ? view('plugins/comment::short-codes.comment', compact('reference', 'loggedUser')) : null;
     }
 
@@ -46,7 +51,7 @@ class HookServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     protected function getReference(): ?string
     {
@@ -54,9 +59,14 @@ class HookServiceProvider extends ServiceProvider
             return base64_encode(json_encode([
                 'reference_type'    => get_class($object),
                 'reference_id'      => $object->id,
+                'author'            => [
+                    'id'    => $this->currentReference->user_id ?: $this->currentReference->author_id,
+                    'type'  => $this->currentReference->user_type ?: $this->currentReference->author_type ?: User::class,
+                ]
             ]));
         }
-        return NULL;
+
+        return null;
     }
 
     /**

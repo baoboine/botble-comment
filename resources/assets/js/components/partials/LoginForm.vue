@@ -1,8 +1,8 @@
 <template>
     <modal :show.sync="show" :on-close="onClose" :on-submit="onSubmit" :loading="isLoading">
         <div slot="header">
-            <h3>Sign in to our platform</h3>
-            <p class="text-gray">Use your credentials to access your account.</p>
+            <h3>{{ __('Sign in to our platform') }}</h3>
+            <p class="text-gray">{{ __('Use your credentials to access your account.') }}</p>
         </div>
 
         <div v-if="errorMessages" slot="error">
@@ -17,7 +17,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
                     </div>
-                    <input type="email" autofocus class="form-control form-control-lg" name="email" placeholder="Enter email" :value="loggedUser.email" required="">
+                    <input type="email" autofocus class="form-control form-control-lg" name="email" :placeholder="__('Enter email')" :value="loggedUser.email" required="">
                 </div>
             </div>
             <div class="form-group">
@@ -25,7 +25,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
                     </div>
-                    <input class="form-control form-control-lg" placeholder="Password" name="password" type="password" required="">
+                    <input class="form-control form-control-lg" :placeholder="__('Password')" name="password" type="password" required="">
                 </div>
 
             </div>
@@ -33,10 +33,10 @@
 
         <div class="d-block d-sm-flex justify-content-between align-items-center mt-2" slot="footer" v-if="!isRegistering">
             <div>
-                <a href="javascript:" @click="isRegistering = true" class="small text-right">Create account</a>
+                <a href="javascript:" @click="isRegistering = true" class="small text-right">{{ __('Create account') }}</a>
             </div>
             <div>
-                <button class="btn btn-primary btn-block" type="submit">Login</button>
+                <button class="btn btn-primary btn-block" type="submit">{{ __('Login') }}</button>
             </div>
         </div>
 
@@ -48,7 +48,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-user"></i></span>
                     </div>
-                    <input type="text" autofocus="true" class="form-control form-control-lg" name="name" placeholder="Enter name" required="">
+                    <input type="text" autofocus="true" class="form-control form-control-lg" name="name" :placeholder="__('Enter name')" required="">
                 </div>
             </div>
             <div class="form-group" key="email">
@@ -56,7 +56,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
                     </div>
-                    <input type="email" autofocus="true" class="form-control form-control-lg" name="email" placeholder="Enter email" :value="loggedUser.email" required="">
+                    <input type="email" autofocus="true" class="form-control form-control-lg" name="email" :placeholder="__('Enter email')" :value="loggedUser.email" required="">
                 </div>
             </div>
             <div class="form-group">
@@ -64,7 +64,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
                     </div>
-                    <input class="form-control form-control-lg" placeholder="Password" name="password" type="password" required="">
+                    <input class="form-control form-control-lg" :placeholder="__('Password')" name="password" type="password" required="">
                 </div>
             </div>
 
@@ -73,17 +73,17 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
                     </div>
-                    <input class="form-control form-control-lg" placeholder="Confirm Password" name="password_confirmation" type="password" required="">
+                    <input class="form-control form-control-lg" :placeholder="__('Confirm Password')" name="password_confirmation" type="password" required="">
                 </div>
             </div>
         </div>
 
         <div class="d-block d-sm-flex justify-content-between align-items-center mt-2" slot="footer" v-if="isRegistering">
             <div>
-                <a href="javascript:" @click="isRegistering = false" class="small text-right">Back to login</a>
+                <a href="javascript:" @click="isRegistering = false" class="small text-right">{{ __('Back to login') }}</a>
             </div>
             <div>
-                <button class="btn btn-primary" type="submit">Sign Up</button>
+                <button class="btn btn-primary" type="submit">{{ __('Sign Up') }}</button>
             </div>
         </div>
 

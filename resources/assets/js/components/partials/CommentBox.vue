@@ -2,7 +2,7 @@
     <div class="bb-comment-box d-flex">
         <avatar v-if="!isEdit" :user="data.userData"></avatar>
         <form class="bb-textarea" @submit="this.postComment">
-            <textarea class="form-control" rows="1" name="comment" placeholder="Share your thoughts about that" :value="defaultValue" />
+            <textarea class="form-control" rows="1" name="comment" placeholder="Share your thoughts about that" @change="onChange" :value="value" />
             <div class="bb-textarea-error alert alert-danger m-0" v-if="error">
                 <span>{{ error }}</span>
             </div>
@@ -12,13 +12,13 @@
                 </div>
 
                 <div class="bb-textarea-footer-right" v-if="!isEdit">
-                    <button type="submit" v-if="data.userData" :class="'post-btn' + (isSending ? ' button-loading' : '')">Post as {{ data.userData.name }}</button>
-                    <button type="submit" v-if="!data.userData" class="post-btn post-none">Login to Post</button>
+                    <button type="submit" v-if="data.userData" :class="'post-btn' + (isSending ? ' button-loading' : '')">{{ __('Post as') }} {{ data.userData.name }}</button>
+                    <button type="submit" v-if="!data.userData" class="post-btn post-none">{{ __('Login to Post') }}</button>
                 </div>
 
                 <div class="bb-textarea-footer-right" v-if="isEdit">
-                    <button type="button" class="post-btn cancel-btn" @click="onCancel">Cancel</button>
-                    <button type="submit" v-if="data.userData" :class="'post-btn' + (isSending ? ' button-loading' : '')">Update</button>
+                    <button type="button" class="post-btn cancel-btn" @click="onCancel">{{ __('Cancel') }}</button>
+                    <button type="submit" v-if="data.userData" :class="'post-btn' + (isSending ? ' button-loading' : '')">{{ __('Update') }}</button>
                 </div>
             </div>
 
@@ -43,9 +43,13 @@ export default {
         return {
             isSending: false,
             error: false,
+            value: '',
         }
     },
     methods: {
+        onChange(e) {
+            this.value = e.target.value;
+        },
         postComment(e) {
             e.preventDefault();
             if (!this.data.userData) {
@@ -58,6 +62,7 @@ export default {
                     .then(({ data }) => {
                         this.isSending = false;
                         if (!data.error) {
+                            this.value = '';
                             const textarea = this.$el.querySelector('textarea');
                             this.onSuccess(data.data);
                             this.error = false;
@@ -109,6 +114,10 @@ export default {
 
         if (this.autoFocus) {
             this.$el.querySelector('textarea').focus()
+        }
+
+        if (this.defaultValue) {
+            this.value = this.defaultValue;
         }
     },
     inject: ['getUser', 'data', 'reference', 'postUrl', 'updateCount', 'openLoginForm']

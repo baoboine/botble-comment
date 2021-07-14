@@ -5,6 +5,7 @@ namespace Botble\Comment\Supports;
 
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Http\Request;
+use Botble\ACL\Models\User;
 
 
 class CloneUserToCommentUser
@@ -24,6 +25,7 @@ class CloneUserToCommentUser
                 'email' => $user->email,
                 'password' => $user->password,
                 'avatar_id' => $user->avatar_id,
+                'user_type' => User::class,
             ], ['email' => $user->email]);
         }
 

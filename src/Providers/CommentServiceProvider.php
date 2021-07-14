@@ -3,9 +3,13 @@
 namespace Botble\Comment\Providers;
 
 use Botble\Comment\Models\Comment;
+use Botble\Comment\Models\CommentLike;
 use Botble\Comment\Models\CommentUser;
+use Botble\Comment\Repositories\Caches\CommentLikeCacheDecorator;
 use Botble\Comment\Repositories\Caches\CommentUserCacheDecorator;
+use Botble\Comment\Repositories\Eloquent\CommentLikeRepository;
 use Botble\Comment\Repositories\Eloquent\CommentUserRepository;
+use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Support\ServiceProvider;
 use Botble\Comment\Repositories\Caches\CommentCacheDecorator;
@@ -30,6 +34,10 @@ class CommentServiceProvider extends ServiceProvider
 
         $this->app->bind(CommentUserInterface::class, function () {
             return new CommentUserCacheDecorator(new CommentUserRepository(new CommentUser));
+        });
+
+        $this->app->bind(CommentLikeInterface::class, function() {
+            return new CommentLikeCacheDecorator(new CommentLikeRepository(new CommentLike));
         });
 
         if (!is_plugin_active('member')) {
@@ -75,7 +83,7 @@ class CommentServiceProvider extends ServiceProvider
                     'priority'    => 5,
                     'parent_id'   => null,
                     'name'        => 'plugins/comment::comment.name',
-                    'icon'        => 'fa fa-list',
+                    'icon'        => 'fa fa-comment',
                     'url'         => route('comment.index'),
                     'permissions' => ['comment.index'],
                 ])

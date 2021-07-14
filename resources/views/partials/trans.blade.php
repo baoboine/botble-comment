@@ -1,0 +1,7 @@
+<script>
+    window.trans = {
+
+
+    }
+
+</script>

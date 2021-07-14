@@ -1,12 +1,42 @@
 $prefix: "bb-";
 $primaryColor: var(--color-1st, #0088cc);
 .#{$prefix}comment-wrapper {
+    @import '~bootstrap/scss/bootstrap';
     padding: 10px;
+    font-size: 15px;
+    line-height: 30px;
+    font-weight: 400;
+    color: #828282;
+    font-family: Roboto, sans-serif;
+
+    .dropdown-item {
+        padding: .45rem 1.5rem;
+    }
+
+    .btn {
+        text-transform: uppercase;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn, .form-control:not(textarea) {
+        border-radius: 0 !important;
+    }
+
     .#{$prefix}comment {
         min-height: 150px;
         max-width: 800px;
         margin: auto;
         position: relative;
+
+        &-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.62);
+        }
 
         &-header {
 
@@ -173,11 +203,32 @@ $primaryColor: var(--color-1st, #0088cc);
         }
 
         .#{$prefix}avatar {
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             margin-right: 10px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+
             img {
                 border-radius: 5px;
+            }
+
+            &-upload {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.26);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #FFF;
+                opacity: 0;
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 1;
+                }
             }
         }
     }
@@ -243,3 +294,6 @@ $primaryColor: var(--color-1st, #0088cc);
 
 @import "./dialog";
 @import "./button";
+@import './heart';
+
+

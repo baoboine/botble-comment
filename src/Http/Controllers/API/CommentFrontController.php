@@ -6,10 +6,15 @@ namespace Botble\Comment\Http\Controllers\API;
 
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
+use Botble\Comment\Models\Comment;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
+use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
+use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Botble\Comment\Supports\CheckMemberCredentials;
+use RvMedia;
 
 class CommentFrontController extends BaseController
 {
@@ -64,16 +69,11 @@ class CommentFrontController extends BaseController
                 ->setError()
                 ->setMessage(__('Invalid reference'));
         }
-        $user = null;
+        $user = $this->memberCredentials->handle($request);
         $parentId = $request->input('up', 0);
         $page = $request->input('page', 1);
         $limit = $request->input('limit', 5);
         $sort = $request->input('sort', 'newest');
-
-
-        if ($token = $this->memberCredentials->handle()) {
-            $user = $token->user($request);
-        }
 
         list($comments, $attrs) = $this->commentRepository->getComments($reference, $parentId, $page, $limit, $sort);
 
@@ -126,12 +126,69 @@ class CommentFrontController extends BaseController
 
     /**
      * @param Request $request
+     * @param CommentLikeInterface $commentLikeRepo
+     * @return BaseHttpResponse
+     */
+    public function likeComment(Request $request, CommentLikeInterface $commentLikeRepo)
+    {
+        $id = $request->input('id');
+        $user = $request->user();
+
+        $comment = $this->commentRepository->getFirstBy(compact('id'));
+
+        $liked = $commentLikeRepo->likeThisComment($comment, $user);
+
+        return $this->response
+            ->setData(compact('liked'))
+            ->setMessage($liked ? __('Like successfully') : __('Unlike successfully'));
+    }
+
+
+    public function changeAvatar(Request $request, CommentUserInterface $commentUserRepo, BaseHttpResponse $response)
+    {
+        $validator = Validator::make($request->all(), [
+            'photo' => 'required|image|mimes:jpg,jpeg,png',
+        ]);
+
+        if ($validator->fails()) {
+            return $response
+                ->setError()
+                ->setCode(422)
+                ->setMessage(__('Data invalid!') . ' ' . implode(' ', $validator->errors()->all()) . '.');
+        }
+
+        try {
+
+            $file = RvMedia::handleUpload($request->file('photo'), 0, 'members');
+            if (Arr::get($file, 'error') !== true) {
+                $commentUserRepo->createOrUpdate(['avatar_id' => $file['data']->id],
+                    ['id' => $request->user()->getKey()]);
+            }
+
+            return $response
+                ->setMessage(__('Update avatar successfully!'));
+
+        } catch (Exception $ex) {
+            return $response
+                ->setError()
+                ->setMessage($ex->getMessage());
+        }
+    }
+
+    /**
+     * @param Request $request
      * @return mixed|null
      */
     protected function reference(Request $request)
     {
         try {
-            return json_decode(base64_decode($request->input('reference')), true);
+            $reference = json_decode(base64_decode($request->input('reference')), true);
+
+            if (isset($reference['author']) && !empty($reference['author'])) {
+                Comment::$author = (object)$reference['author'];
+            }
+
+            return $reference;
         } catch (\Exception $e) {
             return null;
         }

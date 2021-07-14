@@ -1,0 +1,89 @@
+$heart-color: #aaa;
+$heart-color-active: #da3737;
+$heart-size: 1.8em;
+
+.bb-heart {
+    > span {
+        position: relative;
+        color: $heart-color;
+        text-decoration: none;
+        font-size: $heart-size;
+        transition: all 0.4s ease-out;
+        vertical-align: middle;
+
+        &.active, &.active:hover {
+            color: $heart-color-active;
+        }
+
+        &:hover {
+            color: darken($heart-color, 10%);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+        }
+
+        &:before {
+            content: attr(data-text);
+            position: absolute;
+            top: -4px;
+            left: 0;
+            opacity: 0.8;
+        }
+
+        &.active:before {
+            animation: heart-bump 0.8s 1;
+        }
+    }
+}
+
+@keyframes heart-bump {
+    0% {
+        opacity: 0.8;
+    }
+
+    30% {
+        transform: rotate(20deg);
+    }
+
+    60% {
+        transform: rotate(-20deg);
+    }
+
+    100% {
+        opacity: 0;
+        top: -30px;
+        transform: rotate(0deg);
+    }
+}
+
+
+// Like twitter
+.bb-like {
+    cursor: pointer;
+    height: 50px;
+    width: 50px;
+    background-image:url( 'https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png');
+    background-position: left;
+    background-repeat:no-repeat;
+    background-size:2900%;
+    transition: none;
+    margin-top: -9px;
+    margin-left: -9px;
+
+    &:hover, &.ok {
+        background-position:right;
+    }
+
+    &.ok {
+        animation: heart-burst .8s steps(28) 1;
+    }
+
+    & + span {
+        margin-top: 1px;
+        margin-left: -10px;
+        font-size: 12px;
+    }
+}
+
+@keyframes heart-burst {
+    from {background-position:left;}
+    to { background-position:right;}
+}

@@ -19,6 +19,10 @@ $.fn.getFormData = function(options) {
 
 Vue.component('comment', CommentComponent);
 
+Vue.prototype.__ = key => {
+    return window.trans[key] !== undefined ? window.trans[key] : key;
+};
+
 const app = new Vue({
     el: '#bb-comment'
 });

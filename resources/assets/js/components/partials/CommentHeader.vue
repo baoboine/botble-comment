@@ -1,7 +1,7 @@
 <template>
     <div class="bb-comment-header" v-if="data.attrs">
         <div class="bb-comment-header-top d-flex justify-content-between">
-            <strong>{{ data.attrs.count_all }} Comments</strong>
+            <strong>{{ data.attrs.count_all }} {{ __('Comments') }}</strong>
 
             <div class="btn-group">
                 <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="() => !isLogged && openLoginForm()">
@@ -10,26 +10,26 @@
                     <i class="fas fa-sort-down" v-if="this.isLogged"></i>
                 </button>
                 <div class="dropdown-menu" v-show="this.isLogged">
-                    <a class="dropdown-item" href="javascript:" @click="logout">Logout</a>
+                    <a class="dropdown-item" href="javascript:" @click="logout">{{ __('Logout') }}</a>
                 </div>
             </div>
         </div>
 
 
         <div class="bb-comment-header-bottom d-flex justify-content-between">
-            <button class="btn btn-sm p-0 recommend-btn">
-                <i class="far fa-heart"></i> Recommend
+            <button class="btn btn-sm p-0 recommend-btn bb-heart">
+                <span data-text="❤">❤</span> {{ __('Recommend') }}
             </button>
 
             <div class="btn-group">
                 <button type="button" class="btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort By {{ data.sort }}
+                    {{ __('Sort By') }} {{ data.sort }}
                     <i class="fas fa-sort-down"></i>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" v-bind:class="data.sort === 'newest' && 'active'" href="#" @click="() => onChangeSort('newest')">Newest</a>
-                    <a class="dropdown-item" v-bind:class="data.sort === 'best' && 'active'" href="#" @click="() => onChangeSort('best')">Best</a>
-                    <a class="dropdown-item" v-bind:class="data.sort === 'oldest' && 'active'" href="#" @click="() => onChangeSort('oldest')">Oldest</a>
+                    <a class="dropdown-item" v-bind:class="data.sort === 'newest' && 'active'" href="javascript:" @click="() => onChangeSort('newest')">{{ __('Newest') }}</a>
+                    <a class="dropdown-item" v-bind:class="data.sort === 'best' && 'active'" href="javascript:" @click="() => onChangeSort('best')">{{ __('Best') }}</a>
+                    <a class="dropdown-item" v-bind:class="data.sort === 'oldest' && 'active'" href="javascript:" @click="() => onChangeSort('oldest')">{{ __('Oldest') }}</a>
                 </div>
             </div>
         </div>
