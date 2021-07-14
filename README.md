@@ -7,7 +7,13 @@
 - Before enable you need to makesure Laravel Passport is installed or just update
 ``` bash
 $ composer update
-$ php artisan passport:install
+```
+- Install passport if this is your first time
+```bash
+# update passport database
+$ php artisan migrate 
+# install key
+$ php artisan passport:install 
 ```
 
 ## Usage
