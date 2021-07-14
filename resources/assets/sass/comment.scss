@@ -1,0 +1,245 @@
+$prefix: "bb-";
+$primaryColor: var(--color-1st, #0088cc);
+.#{$prefix}comment-wrapper {
+    padding: 10px;
+    .#{$prefix}comment {
+        min-height: 150px;
+        max-width: 800px;
+        margin: auto;
+        position: relative;
+
+        &-header {
+
+            &-top {
+                margin-bottom: 10px;
+                border-bottom: 2px solid #e7e9ee;
+
+                strong {
+                    border-bottom: 2px solid $primaryColor;
+                }
+
+                .btn {
+                    i {
+                        top: -4px;
+                    }
+                }
+            }
+
+            &-bottom {
+                margin-bottom: 1rem;
+                .recommend-btn {
+                    i {
+                        color: red;
+                    }
+                }
+            }
+        }
+
+        &-box {
+            margin-bottom: 1rem;
+            .#{$prefix}textarea {
+                flex: 1;
+
+                textarea {
+                    min-height: 48px;
+                    margin: 0;
+                    padding: 13px;
+                    width: 100%;
+                    border-radius: 5px 5px 0 0;
+                    transition: all 0.3s;
+                    box-shadow: none;
+
+                    & + div {
+                        display: none;
+                    }
+
+                    &:focus, &.focused{
+                        min-height: 60px;
+                        & + div {
+                            display: flex;
+                        }
+                    }
+                }
+
+                &-error {
+                    border-radius: 0 !important;
+
+                    & + div {
+                        display: flex;
+                    }
+                }
+
+                &-footer {
+                    background-color: #f2f2f2;
+                    justify-content: space-between;
+                    border: 1px solid #ced4da;
+                    border-top: 0;
+                    border-radius: 0 0 5px 5px;
+                    .post-btn {
+                        background-color: $primaryColor;
+                        border: none;
+                        box-shadow: none;
+                        color: #FFF;
+                        padding: .375rem .75rem;
+                        font-size: 1rem;
+                        min-width: 100px;
+                        border-radius: 0 0 5px 0;
+
+                        &.post-none {
+                            background-color: #ccc;
+                        }
+
+                        &.cancel-btn {
+                            background: none;
+                            color: #888;
+                        }
+
+                        &:hover {
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+        }
+
+        &-list {
+            &-empty {
+                p {
+                    font-size: 18px;
+                    padding: 2rem;
+                    color: #ccc;
+                }
+            }
+        }
+
+        &-item {
+            $item: &;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+
+            p {
+                margin: 0;
+            }
+
+            &-actions {
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateX(100px);
+                transition: all 0.3s;
+            }
+
+            &:hover {
+                & > [class*="actions"] {
+                    transform: translateX(-20px);
+                }
+
+                &:after {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    background-color: #f2f2f2;
+                    width: 4px;
+                    height: 100%;
+                }
+            }
+
+
+        }
+
+        &-content {
+            &-actions {
+                a {
+                    font-size: 12px;
+
+                    &.reply {
+                        padding-right: 10px;
+                    }
+
+                    &.like {
+                        padding: 0 10px;
+                    }
+                }
+            }
+
+            &-user {
+                margin-top: -6px;
+                .time {
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .#{$prefix}avatar {
+            width: 48px;
+            height: 48px;
+            margin-right: 10px;
+            img {
+                border-radius: 5px;
+            }
+        }
+    }
+
+
+    $spinnerWidth: 40px;
+    $spinnerWidthMini: 20px;
+    .bb-loading {
+        box-sizing: border-box;
+
+        * {
+            box-sizing: border-box;
+        }
+
+        width: $spinnerWidth;
+        height: $spinnerWidth;
+
+        border-radius: 100%;
+        left: calc(50% - 15px);
+        top: calc(50% - 15px);
+        position: absolute;
+        z-index: 1;
+
+        .circle, &:after, &:before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+            border: calc(#{$spinnerWidth} / 10) solid transparent;
+        }
+
+        &.mini {
+            width: $spinnerWidthMini;
+            height: $spinnerWidthMini;
+
+            .circle, &:after, &:before {
+                border-width: calc(#{$spinnerWidthMini} / 10);
+            }
+        }
+
+        &:after {
+            border-top-color: $primaryColor;
+            animation: half-circle-spinner-animation 1s infinite;
+        }
+
+        &:before {
+            border-bottom-color: $primaryColor;
+            animation: half-circle-spinner-animation 1s infinite alternate;
+        }
+    }
+
+    @keyframes half-circle-spinner-animation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+@import "./dialog";
+@import "./button";

@@ -1,0 +1,9 @@
+{
+    "name": "Comment",
+    "namespace": "Botble\\Comment\\",
+    "provider": "Botble\\Comment\\Providers\\CommentServiceProvider",
+    "author": "Bao Boi",
+    "url": "N/A",
+    "version": "1.2",
+    "description": "The description for module comment"
+}
