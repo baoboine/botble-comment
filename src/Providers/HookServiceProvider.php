@@ -71,6 +71,7 @@ class HookServiceProvider extends ServiceProvider
 
         Theme::asset()
             ->usePath(false)
+            ->add('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
             ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css');
     }
 }

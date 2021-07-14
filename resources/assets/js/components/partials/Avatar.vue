@@ -1,6 +1,6 @@
 <template>
     <div class="bb-avatar">
-        <img src="../images/avatar.png" alt="avatar" class="img-circle" />
+        <img src="/public/vendor/core/plugins/comment/images/avatar.png" alt="avatar" class="img-circle" />
     </div>
 </template>
 
