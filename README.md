@@ -1,3 +1,5 @@
+<p align="center"><a href="https://suyt.tech" target="_blank"><img src="https://suyt.tech/comment.png" width="800"></a></p>
+
 # Botble plugin comment
 
 ## Install
