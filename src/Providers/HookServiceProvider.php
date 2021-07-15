@@ -4,6 +4,7 @@
 namespace Botble\Comment\Providers;
 
 use Botble\ACL\Models\User;
+use Botble\Member\Models\Member;
 use Illuminate\Support\ServiceProvider;
 use Theme;
 
@@ -12,8 +13,13 @@ class HookServiceProvider extends ServiceProvider
 
     protected $currentReference;
 
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     public function boot()
     {
+        $this->registerAttribute();
+
         add_shortcode('comment', 'Comment', 'Comment for this article', [$this, 'renderComment']);
         add_action(BASE_ACTION_PUBLIC_RENDER_SINGLE, [$this, 'storageCurrentReference'], 100, 2);
     }
@@ -81,7 +87,19 @@ class HookServiceProvider extends ServiceProvider
 
         Theme::asset()
             ->usePath(false)
-            ->add('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
+            ->add('font-awesome-5', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
             ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css');
+    }
+
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function registerAttribute()
+    {
+        if (has_member()) {
+            \MacroableModels::addMacro(Member::class, 'getNameAttribute', function() {
+                return $this->first_name.' '. $this->last_name;
+            });
+        }
     }
 }

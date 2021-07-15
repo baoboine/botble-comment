@@ -9,5 +9,9 @@
         check-current-user-api="{{ route('comment.current-user') }}"
         like-url="{{ route('comment.like') }}"
         change-avatar-url="{{ route('comment.update-avatar') }}"
+        login-url="{{ route('public.comment.login') }}"
+        logout-url="{{ route('comment.logout') }}"
+        register-url="{{ route('public.comment.register') }}"
+        recommend-url="{{ route('comment.recommend') }}"
     ></comment>
 </div>

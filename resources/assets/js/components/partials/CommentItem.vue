@@ -5,7 +5,7 @@
 
             <div class="bb-comment-content w-100">
                 <div class="bb-comment-content-user">
-                    <strong>{{ comment.user ? comment.user.name : "Guest" }}</strong>
+                    <strong>{{ comment.user ? comment.user.name || `${comment.user.first_name} ${comment.user.last_name}` : "Guest" }}</strong>
                     <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
                     <span class="px-2">•</span>
                     <span class="time">{{ comment.time }}</span>
@@ -94,7 +94,6 @@ export default {
     },
     mounted() {
         const rep = this.comment.rep;
-
         if (rep && rep.data) {
             this.comments = rep.data;
             this.attrs = {
@@ -112,6 +111,7 @@ export default {
         onPostCommentSuccess(comment) {
             comment.replies = [];
             comment.user = this.data.userData;
+            comment.like_count = 0;
 
             this.showReply = false;
             this.comments.unshift(comment);

@@ -14,15 +14,23 @@ class CommentLike extends BaseModel
         'comment_id',
     ];
 
+    protected static function updateCountLike(CommentLike $like) {
+        $comment = Comment::where(['id' => $like->comment_id])->first();
+
+        $comment->like_count = CommentLike::where(['comment_id' => $like->comment_id])->count();
+        $comment->save();
+    }
+
     protected static function boot()
     {
         parent::boot();
 
         static::created(function(CommentLike $like) {
-            $comment = Comment::where(['id' => $like->comment_id])->first();
+            static::updateCountLike($like);
+        });
 
-            $comment->like_count = CommentLike::where(['comment_id' => $like->comment_id])->count();
-            $comment->save();
+        static::deleted(function(CommentLike $like) {
+            static::updateCountLike($like);
         });
     }
 }

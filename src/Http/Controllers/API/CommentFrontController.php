@@ -9,6 +9,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
+use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -62,7 +63,7 @@ class CommentFrontController extends BaseController
         return $this->response->setData($comment);
     }
 
-    public function getComments(Request $request)
+    public function getComments(Request $request, CommentRecommendInterface $commentRecommendRepo)
     {
         if (!($reference = $this->reference($request))) {
             return $this->response
@@ -79,9 +80,10 @@ class CommentFrontController extends BaseController
 
         return $this->response
             ->setData([
-                'comments'  => $comments,
-                'attrs'     => $attrs,
-                'user'      => $user,
+                'comments'      => $comments,
+                'attrs'         => $attrs,
+                'user'          => $user,
+                'recommend'     => $commentRecommendRepo->getRecommendOfArticle($reference, $user),
             ]);
 
     }
@@ -173,6 +175,36 @@ class CommentFrontController extends BaseController
                 ->setError()
                 ->setMessage($ex->getMessage());
         }
+    }
+
+    /**
+     * @param Request $request
+     * @param CommentRecommendInterface $commentRecommendRepo
+     * @return BaseHttpResponse
+     */
+    public function recommend(Request $request, CommentRecommendInterface $commentRecommendRepo): BaseHttpResponse
+    {
+        $reference = $this->reference($request);
+        $user = $request->user();
+
+        if ($reference) {
+            $params = array_merge(
+                Arr::only($reference, ['reference_type', 'reference_id']), ['user_id' => $user->id]
+            );
+            $recommend = $commentRecommendRepo->getFirstBy($params);
+
+            if (!$recommend) {
+                $commentRecommendRepo->createOrUpdate($params);
+            } else {
+                $recommend->delete();
+            }
+
+            return $this->response
+                ->setData($recommend);
+        }
+
+        return $this->response
+            ->setError();
     }
 
     /**

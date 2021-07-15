@@ -1,6 +1,6 @@
 <template>
     <div class="bb-comment">
-        <comment-header />
+        <comment-header :recommend="recommend" />
         <comment-box :on-success="onPostCommentSuccess" />
         <div class="bb-loading" v-if="isLoading"></div>
         <div class="bb-comment-list" v-if="!isLoading">
@@ -27,6 +27,8 @@
         <div class="bb-comment-loading" v-if="isSoftLoading">
             <div class="bb-loading mini"></div>
         </div>
+
+        <comment-footer />
     </div>
 </template>
 
@@ -35,6 +37,7 @@ import CommentBox from "./partials/CommentBox";
 import CommentItem from "./partials/CommentItem";
 import CommentHeader from "./partials/CommentHeader";
 import ConfirmDialog from "./partials/ConfirmDialog";
+import CommentFooter from "./partials/CommentFooter";
 import LoginForm from "./partials/LoginForm";
 import Http from '../service/http';
 import Ls from '../service/Ls';
@@ -48,6 +51,7 @@ export default {
             isLoadMore: false,
             error: false,
             comments: [],
+            recommend: {},
             reactive: {
                 userData: null,
                 attrs: null,
@@ -64,6 +68,7 @@ export default {
         CommentHeader,
         ConfirmDialog,
         LoginForm,
+        CommentFooter,
 
     },
     props: {
@@ -91,7 +96,23 @@ export default {
             type: String,
             required: true,
         },
+        loginUrl: {
+            type: String,
+            required: true,
+        },
+        logoutUrl: {
+            type: String,
+            required: true,
+        },
+        registerUrl: {
+            type: String,
+            required: true,
+        },
         changeAvatarUrl: {
+            type: String,
+            required: true,
+        },
+        recommendUrl: {
             type: String,
             required: true,
         },
@@ -142,6 +163,7 @@ export default {
                 this.comments = data.data.comments;
                 this.reactive.userData = data.data.user;
                 this.reactive.attrs = data.data.attrs;
+                this.recommend = data.data.recommend;
             })
         },
         loadMoreComments() {
@@ -159,6 +181,7 @@ export default {
         onPostCommentSuccess(comment) {
             comment.replies = [];
             comment.user = this.reactive.userData;
+            comment.like_count = 0;
 
             this.comments.unshift(comment);
         },
@@ -195,10 +218,11 @@ export default {
             this.reactive.sort = sort;
             this.loadComments();
         },
-        checkCurrentUser(cb) {
+        async checkCurrentUser(cb) {
             this.setSoftLoading(true);
-            Http.post(this.checkCurrentUserApi)
-                .then(res => {
+            try {
+                const res = await Http.post(this.checkCurrentUserApi)
+                if (res) {
                     this.setSoftLoading(false);
                     if (res.data.error) {
                         cb();
@@ -206,10 +230,11 @@ export default {
                         Ls.set('auth.token', res.data.data.token);
                         this.getCurrentUserData();
                     }
-                }, () => {
-                    this.setSoftLoading(false);
-                    cb();
-                })
+                }
+            } catch(e) {
+                cb();
+                this.setSoftLoading(false)
+            }
         },
         setSoftLoading(value = true) {
             this.isSoftLoading = value;
@@ -234,6 +259,10 @@ export default {
             onChangeSort: this.onChangeSort,
             setSoftLoading: this.setSoftLoading,
             changeAvatarUrl: this.changeAvatarUrl,
+            registerUrl: this.registerUrl,
+            logoutUrl: this.logoutUrl,
+            loginUrl: this.loginUrl,
+            recommendUrl: this.recommendUrl,
         }
     }
 }

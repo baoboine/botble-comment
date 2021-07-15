@@ -1,7 +1,7 @@
 <template>
     <modal :show.sync="show" :on-close="onClose" :on-submit="onSubmit" :loading="isLoading">
         <div slot="header">
-            <h3>{{ __('Sign in to our platform') }}</h3>
+            <h3>{{ !this.isRegistering ? __('Sign in to our platform') : __('Sign Up') }}</h3>
             <p class="text-gray">{{ __('Use your credentials to access your account.') }}</p>
         </div>
 
@@ -17,7 +17,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
                     </div>
-                    <input type="email" autofocus class="form-control form-control-lg" name="email" :placeholder="__('Enter email')" :value="loggedUser.email" required="">
+                    <input type="email" autofocus class="form-control form-control-lg" name="email" :placeholder="__('Enter email')" required="">
                 </div>
             </div>
             <div class="form-group">
@@ -156,9 +156,9 @@ export default {
         onSubmit(e) {
             this.isLoading = true;
             const formData = $(e.target).serializeData();
-            Http.post(`/api/v1/${!this.isRegistering ? 'login' : 'register'}`, formData).then(this.onSuccess, this.onError);
+            Http.post(!this.isRegistering ? this.loginUrl : this.registerUrl, formData).then(this.onSuccess, this.onError);
         },
     },
-    inject: ['loggedUser']
+    inject: ['loggedUser', 'loginUrl', 'registerUrl']
 }
 </script>

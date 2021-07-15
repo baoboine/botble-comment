@@ -17,8 +17,9 @@
 
 
         <div class="bb-comment-header-bottom d-flex justify-content-between">
-            <button class="btn btn-sm p-0 recommend-btn bb-heart">
-                <span data-text="❤">❤</span> {{ __('Recommend') }}
+            <button class="btn btn-sm p-0 recommend-btn bb-heart" :class="{'font-weight-bold': isRecommended}" @click="onRecommend">
+                <span data-text="❤" :class="{'active': isRecommended}">❤</span> {{ !isRecommended ? __('Recommend') : __('Recommended') }}
+                <span class="badge badge-secondary" v-if="countRecommend > 0">{{ countRecommend }}</span>
             </button>
 
             <div class="btn-group">
@@ -42,12 +43,28 @@ import Ls from '../../service/Ls';
 
 export default {
     name: "Header",
+    data: () => {
+        return {
+            isRecommended: false,
+            countRecommend: 0,
+        }
+    },
     methods: {
         logout() {
-            Http.post('/api/v1/logout').then(res => {
+            Http.post(this.logoutUrl).then(res => {
                 Ls.remove('auth.token');
                 this.getUser();
             });
+        },
+        async onRecommend() {
+            const res = await Http.post(this.recommendUrl, { reference: this.reference });
+            this.isRecommended = !res.data.data;
+            this.countRecommend += this.isRecommended ? 1 : -1;
+        }
+    },
+    props: {
+        recommend: {
+            type: Object,
         }
     },
     computed: {
@@ -56,8 +73,16 @@ export default {
         },
         userData() {
             return this.data.userData ?? {}
+        },
+    },
+    watch: {
+        recommend(newVal, oldVal) {
+            if (typeof this.recommend.isRecommended !== 'undefined') {
+                this.isRecommended = this.recommend.isRecommended;
+                this.countRecommend = this.recommend.count;
+            }
         }
     },
-    inject: ['data', 'getUser', 'openLoginForm', 'onChangeSort']
+    inject: ['reference', 'data', 'getUser', 'openLoginForm', 'onChangeSort', 'logoutUrl', 'recommendUrl']
 }
 </script>

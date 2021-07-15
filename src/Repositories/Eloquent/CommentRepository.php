@@ -41,6 +41,8 @@ class CommentRepository extends RepositoriesAbstract implements CommentInterface
                     return ['created_at' => 'desc'];
                 case 'oldest':
                     return ['created_at' => 'asc'];
+                case 'best':
+                    return ['like_count' => 'desc'];
             }
         })();
 
@@ -66,7 +68,7 @@ class CommentRepository extends RepositoriesAbstract implements CommentInterface
         ];
         $count = -1;
 
-        if ($parentId === 0) {
+        if ($parentId === 0 && $page === 1) {
             $count = $this->count($condition);
         }
 

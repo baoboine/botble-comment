@@ -15,7 +15,7 @@ class CheckMemberCredentials
 {
     protected $app;
 
-    protected $provider = 'members';
+    protected $provider = COMMENT_GUARD;
 
     public function __construct(Application $app)
     {
@@ -32,7 +32,11 @@ class CheckMemberCredentials
             $this->app->make('encrypter')
         ))->user($request);
 
-        app('auth')->guard('member')->setUser($user);
-        return $user;
+        if ($user) {
+            app('auth')->guard(COMMENT_GUARD)->setUser($user);
+            return $user;
+        }
+
+        return null;
     }
 }

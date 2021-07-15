@@ -95,7 +95,7 @@ class Comment extends BaseModel
     public function getIsAuthorAttribute()
     {
         if (self::$author && $this->user) {
-            return $this->original['user_id'] === self::$author->id && $this->user->original['user_type'] === self::$author->type;
+            return $this->user_id === self::$author->id && $this->user->user_type === self::$author->type;
         }
         return false;
     }
@@ -109,8 +109,8 @@ class Comment extends BaseModel
 
     public function getLikedAttribute()
     {
-        if ((int)$this->like_count > 0 && auth()->guard('member')->check()) {
-            return $this->likes()->where(['user_id' => auth()->guard('member')->id()])->exists();
+        if ((int)$this->like_count > 0 && auth()->guard(COMMENT_GUARD)->check()) {
+            return $this->likes()->where(['user_id' => auth()->guard(COMMENT_GUARD)->id()])->exists();
         }
         return false;
     }

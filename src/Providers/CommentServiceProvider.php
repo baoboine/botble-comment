@@ -4,12 +4,16 @@ namespace Botble\Comment\Providers;
 
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Models\CommentLike;
+use Botble\Comment\Models\CommentRecommend;
 use Botble\Comment\Models\CommentUser;
 use Botble\Comment\Repositories\Caches\CommentLikeCacheDecorator;
+use Botble\Comment\Repositories\Caches\CommentRecommendCacheDecorator;
 use Botble\Comment\Repositories\Caches\CommentUserCacheDecorator;
 use Botble\Comment\Repositories\Eloquent\CommentLikeRepository;
+use Botble\Comment\Repositories\Eloquent\CommentRecommendRepository;
 use Botble\Comment\Repositories\Eloquent\CommentUserRepository;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
+use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Support\ServiceProvider;
 use Botble\Comment\Repositories\Caches\CommentCacheDecorator;
@@ -28,6 +32,10 @@ class CommentServiceProvider extends ServiceProvider
 
     public function register()
     {
+
+        Helper::autoload(__DIR__ . '/../../helpers');
+
+
         $this->app->bind(CommentInterface::class, function () {
             return new CommentCacheDecorator(new CommentRepository(new Comment));
         });
@@ -40,24 +48,24 @@ class CommentServiceProvider extends ServiceProvider
             return new CommentLikeCacheDecorator(new CommentLikeRepository(new CommentLike));
         });
 
-        if (!is_plugin_active('member')) {
-            config([
-                'auth.guards.member'     => [
-                    'driver'   => 'session',
-                    'provider' => 'members',
-                ],
-                'auth.providers.members' => [
-                    'driver' => 'eloquent',
-                    'model'  => CommentUser::class,
-                ],
-                'auth.guards.member-api' => [
-                    'driver'   => 'passport',
-                    'provider' => 'members',
-                ],
-            ]);
-        }
+        $this->app->bind(CommentRecommendInterface::class, function() {
+            return new CommentRecommendCacheDecorator(new CommentRecommendRepository(new CommentRecommend));
+        });
 
-        Helper::autoload(__DIR__ . '/../../helpers');
+        config([
+            'auth.guards.'.COMMENT_GUARD     => [
+                'driver'   => 'session',
+                'provider' => COMMENT_GUARD,
+            ],
+            'auth.providers.'.COMMENT_GUARD => [
+                'driver' => 'eloquent',
+                'model'  => CommentUser::class,
+            ],
+            'auth.guards.comment-api' => [
+                'driver'   => 'passport',
+                'provider' => COMMENT_GUARD,
+            ],
+        ]);
         $this->configureRateLimiting();
     }
 

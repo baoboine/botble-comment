@@ -17,12 +17,11 @@ Route::group(['namespace' => 'Botble\Comment\Http\Controllers', 'middleware' => 
                 'uses'      => 'CommentController@storeSettings',
                 'permission'    => 'setting.options'
             ]);
-
-            Route::post('login/current', 'CommentController@cloneUser')->name('current-user');
-
         });
 
         Route::get('comment/settings', 'CommentController@getSettings')->name('comment.setting');
     });
 
+
+    Route::post('comments/login/current', 'CommentController@cloneUser')->name('comment.current-user');
 });
