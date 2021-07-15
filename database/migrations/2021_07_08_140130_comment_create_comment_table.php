@@ -12,7 +12,7 @@ class CommentCreateCommentTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('bb_comments', function (Blueprint $table) {
             $table->id();
             $table->longText('comment');
             $table->integer('reference_id')->unsigned();
@@ -24,7 +24,7 @@ class CommentCreateCommentTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('comment_users', function(Blueprint $table) {
+        Schema::create('bb_comment_users', function(Blueprint $table) {
             $table->id();
             $table->string('name', 255);
             $table->string('email')->unique();
@@ -33,7 +33,7 @@ class CommentCreateCommentTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('comment_likes', function(Blueprint $table) {
+        Schema::create('bb_comment_likes', function(Blueprint $table) {
             $table->id();
             $table->integer('comment_id')->unsigned()->references('id')->on('comments')->index();
             $table->integer('user_id')->unsigned()->references('id')->on('comment_users')->index();
@@ -48,7 +48,7 @@ class CommentCreateCommentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
-        Schema::dropIfExists('comment_users');
+        Schema::dropIfExists('bb_comments');
+        Schema::dropIfExists('bb_comment_users');
     }
 }

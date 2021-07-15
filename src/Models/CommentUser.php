@@ -14,7 +14,7 @@ class CommentUser extends Authenticatable
 {
     use HasApiTokens;
 
-    protected $table = 'comment_users';
+    protected $table = 'bb_comment_users';
 
     /**
      * The attributes that should be hidden for arrays.

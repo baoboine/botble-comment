@@ -13,7 +13,7 @@ class AddUserTypeToCommentUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('comment_users', function (Blueprint $table) {
+        Schema::table('bb_comment_users', function (Blueprint $table) {
             $table->string('user_type', 255)->default(addslashes(\Botble\Comment\Models\CommentUser::class));
         });
     }

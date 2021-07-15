@@ -13,7 +13,7 @@ class UpdateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('comments', function(Blueprint $table) {
+        Schema::table('bb_comments', function(Blueprint $table) {
             $table->integer('parent_id')->unsigned()->default(0);
         });
     }

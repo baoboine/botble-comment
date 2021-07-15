@@ -34,7 +34,7 @@ class RegisterController extends BaseController
      */
     protected function guard()
     {
-        return auth('member');
+        return auth(COMMENT_GUARD);
     }
 
     /**
@@ -72,7 +72,7 @@ class RegisterController extends BaseController
     {
         return Validator::make($data, [
             'name'       => 'required|max:255',
-            'email'      => 'required|email|max:255|unique:comment_users',
+            'email'      => 'required|email|max:255|unique:bb_comment_users',
             'password'   => 'required|min:6|confirmed',
         ]);
     }
@@ -94,7 +94,7 @@ class RegisterController extends BaseController
 
     public function registered(Request $request, $user, $response)
     {
-        $token = auth('member')->user()->createToken('Laravel Password Grant Client')->accessToken;
+        $token = auth(COMMENT_GUARD)->user()->createToken('Laravel Password Grant Client')->accessToken;
 
         return $response
             ->setData(compact('token'));

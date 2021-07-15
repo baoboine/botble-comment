@@ -15,7 +15,7 @@ class Comment extends BaseModel
      *
      * @var string
      */
-    protected $table = 'comments';
+    protected $table = 'bb_comments';
 
     public static $author;
 

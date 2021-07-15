@@ -43,7 +43,7 @@ class LoginController extends BaseController
      */
     protected function guard()
     {
-        return auth('member');
+        return auth(COMMENT_GUARD);
     }
 
     /**
@@ -110,7 +110,7 @@ class LoginController extends BaseController
     public function sendLoginResponse(Request $request)
     {
         if ($request->ajax()) {
-            $token = auth('member')->user()->createToken('Laravel Password Grant Client')->accessToken;
+            $token = auth(COMMENT_GUARD)->user()->createToken('Laravel Password Grant Client')->accessToken;
 
             return $this->response->setData([
                 'token' => $token,

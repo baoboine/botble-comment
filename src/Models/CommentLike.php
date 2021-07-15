@@ -8,6 +8,7 @@ use Botble\Base\Models\BaseModel;
 
 class CommentLike extends BaseModel
 {
+    protected $table = 'bb_comment_likes';
 
     protected $fillable = [
         'user_id',

@@ -13,7 +13,7 @@ class CreateCommentRecommendsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comment_recommends', function (Blueprint $table) {
+        Schema::create('bb_comment_recommends', function (Blueprint $table) {
             $table->id();
             $table->integer('reference_id')->unsigned();
             $table->string('reference_type', 120);
@@ -29,6 +29,6 @@ class CreateCommentRecommendsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comment_recommends');
+        Schema::dropIfExists('bb_comment_recommends');
     }
 }

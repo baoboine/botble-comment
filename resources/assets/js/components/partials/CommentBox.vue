@@ -68,6 +68,7 @@ export default {
                             this.error = false;
                             textarea.value = '';
                             textarea.classList.remove('focused')
+                            textarea.style.height = 'auto';
                             this.updateCount();
                         } else {
                             this.error = data.message[Object.keys(data.message)[0]][0]
