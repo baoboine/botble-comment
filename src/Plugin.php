@@ -9,6 +9,9 @@ class Plugin extends PluginOperationAbstract
 {
     public static function remove()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('bb_comments');
+        Schema::dropIfExists('bb_comment_users');
+        Schema::dropIfExists('bb_comment_likes');
+        Schema::dropIfExists('bb_comment_recommends');
     }
 }
