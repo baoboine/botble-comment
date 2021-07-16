@@ -2,7 +2,7 @@
 
 # Botble plugin comment
 
-Demo: https://suyt.tech/which-company-would-you-choose
+Demo: https://suyt.tech/which-company-would-you-choose#bb-comment
 
 ## Install
 
