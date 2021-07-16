@@ -148,6 +148,11 @@ $primaryColor: var(--color-1st, #0088cc);
             position: relative;
             overflow: hidden;
 
+            &.is-sending {
+                opacity: 0.5;
+                pointer-events: none;
+            }
+
             p {
                 margin: 0;
             }

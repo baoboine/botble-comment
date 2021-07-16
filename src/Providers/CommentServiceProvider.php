@@ -25,6 +25,7 @@ use Botble\Base\Traits\LoadAndPublishDataTrait;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use EmailHandler;
 
 class CommentServiceProvider extends ServiceProvider
 {
@@ -72,12 +73,14 @@ class CommentServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->setNamespace('plugins/comment')
-            ->loadAndPublishConfigurations(['permissions'])
+            ->loadAndPublishConfigurations(['permissions', 'email'])
             ->loadMigrations()
             ->publishAssets()
             ->loadAndPublishTranslations()
             ->loadAndPublishViews()
             ->loadRoutes(['web', 'api']);
+
+        $this->app->register(EventServiceProvider::class);
 
         $this->app->booted(function () {
             $this->app->register(HookServiceProvider::class);
@@ -97,6 +100,27 @@ class CommentServiceProvider extends ServiceProvider
                 ])
 
                 ->registerItem([
+                    'id'          => 'cms-plugins-comment-comment',
+                    'priority'    => 1,
+                    'parent_id'   => 'cms-plugins-comment',
+                    'name'        => 'plugins/comment::comment.name',
+                    'icon'        => null,
+                    'url'         => route('comment.index'),
+                    'permissions' => ['comment.index'],
+                ])
+
+                ->registerItem([
+                    'id'          => 'cms-plugins-comment-user',
+                    'priority'    => 2,
+                    'parent_id'   => 'cms-plugins-comment',
+                    'name'        => 'plugins/comment::comment-user.name',
+                    'icon'        => null,
+                    'url'         => route('comment-user.index'),
+                    'permissions' => ['comment-user.index'],
+                ])
+
+
+                ->registerItem([
                     'id'          => 'cms-plugins-comment-setting',
                     'priority'    => 5,
                     'parent_id'   => 'cms-core-settings',
@@ -105,6 +129,8 @@ class CommentServiceProvider extends ServiceProvider
                     'url'         => route('comment.setting'),
                     'permissions' => ['setting.options'],
                 ]);
+
+                EmailHandler::addTemplateSettings(COMMENT_MODULE_SCREEN_NAME, config('plugins.comment.email', []));
         });
     }
 

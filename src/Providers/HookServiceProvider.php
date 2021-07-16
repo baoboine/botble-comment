@@ -4,9 +4,11 @@
 namespace Botble\Comment\Providers;
 
 use Botble\ACL\Models\User;
+use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Member\Models\Member;
 use Illuminate\Support\ServiceProvider;
 use Theme;
+use Html;
 
 class HookServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class HookServiceProvider extends ServiceProvider
 
         add_shortcode('comment', 'Comment', 'Comment for this article', [$this, 'renderComment']);
         add_action(BASE_ACTION_PUBLIC_RENDER_SINGLE, [$this, 'storageCurrentReference'], 100, 2);
+        add_filter(BASE_FILTER_APPEND_MENU_NAME, [$this, 'getUnreadCount'], 210, 2);
     }
 
     /**
@@ -44,6 +47,10 @@ class HookServiceProvider extends ServiceProvider
         return $reference ? view('plugins/comment::short-codes.comment', compact('reference', 'loggedUser')) : null;
     }
 
+    /**
+     * @param $screen
+     * @param $object
+     */
     public function storageCurrentReference($screen, $object)
     {
         $this->currentReference = $object;
@@ -101,5 +108,20 @@ class HookServiceProvider extends ServiceProvider
                 return $this->first_name.' '. $this->last_name;
             });
         }
+    }
+
+    public function getUnreadCount($index, $menuId)
+    {
+        if ($menuId == 'cms-plugins-comment') {
+            $unread = app(CommentInterface::class)->count([
+                ['id', '>', setting('admin-comment_latest_viewed_id', 0)]
+            ]);
+
+            if ($unread > 0) {
+                return Html::tag('span', (string)$unread, ['class' => 'badge badge-success'])->toHtml();
+            }
+        }
+
+        return $index;
     }
 }

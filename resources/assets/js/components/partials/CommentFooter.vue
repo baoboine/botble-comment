@@ -15,6 +15,7 @@ export default {
         border-top: 1px solid #ccc;
         width: 100%;
         padding: 1rem 0;
+        margin-top: 1rem;
 
         h6 {
             color: #ccc;

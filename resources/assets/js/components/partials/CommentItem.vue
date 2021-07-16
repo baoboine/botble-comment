@@ -1,5 +1,5 @@
 <template>
-    <div class="bb-comment-item">
+    <div class="bb-comment-item" :class="{'is-sending': comment.isSending}">
         <div class="d-flex">
             <avatar :user="comment.user"></avatar>
 
@@ -8,7 +8,7 @@
                     <strong>{{ comment.user ? comment.user.name || `${comment.user.first_name} ${comment.user.last_name}` : "Guest" }}</strong>
                     <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
                     <span class="px-2">•</span>
-                    <span class="time">{{ comment.time }}</span>
+                    <span class="time">{{ !comment.isSending ? comment.time : 'sending...' }}</span>
                 </div>
 
                 <div v-show="!showEdit">
@@ -106,13 +106,24 @@ export default {
         replyIt() {
             this.showReply = true;
         },
-        onPostCommentSuccess(comment) {
-            comment.replies = [];
-            comment.user = this.data.userData;
-            comment.like_count = 0;
-
+        onPostCommentSuccess(comment, isSending = false, fillIndex = null) {
             this.showReply = false;
-            this.comments.unshift(comment);
+            if (fillIndex === null) {
+                comment.replies = [];
+                comment.user = this.data.userData;
+                comment.like_count = 0;
+                comment.isSending = isSending;
+
+                return this.comments.unshift(comment);
+            } else {
+                if (fillIndex !== -1) {
+                    comment.isSending = false;
+                    this.comments[0] = Object.assign(this.comments[0], comment);
+                } else {
+                    // failed
+                    this.comments.splice(0, 1);
+                }
+            }
         },
         onCancel() {
             this.showEdit = false;

@@ -125,16 +125,17 @@ export default {
         },
     },
     methods: {
-        getCurrentUserData() {
+        async getCurrentUserData() {
             if (Ls.get('auth.token')) {
                 this.setSoftLoading(true);
-                Http.post(this.userUrl).then(res => {
-                    this.reactive.userData = res.data.data;
-                    this.setSoftLoading(false)
-                })
+                const res = await Http.post(this.userUrl);
+                this.reactive.userData = res.data.data;
+                this.setSoftLoading(false)
             } else {
                 this.reactive.userData = null;
             }
+
+            this.loadComments();
         },
         apiLoadComments(params, cb) {
             Http.get(this.url, {
@@ -178,12 +179,23 @@ export default {
                 })
             }
         },
-        onPostCommentSuccess(comment) {
-            comment.replies = [];
-            comment.user = this.reactive.userData;
-            comment.like_count = 0;
+        onPostCommentSuccess(comment, isSending = false, fillIndex = null) {
+            if (fillIndex === null) {
+                comment.replies = [];
+                comment.user = this.reactive.userData;
+                comment.like_count = 0;
+                comment.isSending = isSending;
 
-            this.comments.unshift(comment);
+                return this.comments.unshift(comment);
+            } else {
+                if (fillIndex !== -1) {
+                    comment.isSending = false;
+                    this.comments[0] = Object.assign(this.comments[0], comment);
+                } else {
+                    // failed
+                    this.comments.splice(0, 1);
+                }
+            }
         },
         showConfirmDialog(title, message, onDone) {
             this.confirmDialogData = {

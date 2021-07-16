@@ -56,6 +56,7 @@ export default {
                 this.openLoginForm();
             } else {
                 const formData = $(e.target).serializeData()
+                const index = this.onSuccess(formData, true)
                 this.isSending = true;
 
                 Http.post(this.postUrl, formData)
@@ -64,16 +65,18 @@ export default {
                         if (!data.error) {
                             this.value = '';
                             const textarea = this.$el.querySelector('textarea');
-                            this.onSuccess(data.data);
+                            this.onSuccess(data.data, false, index);
                             this.error = false;
                             textarea.value = '';
                             textarea.classList.remove('focused')
                             textarea.style.height = 'auto';
                             this.updateCount();
                         } else {
+                            this.onSuccess(null, false, -1);
                             this.error = data.message[Object.keys(data.message)[0]][0]
                         }
                     }, error => {
+                        this.onSuccess(null, false, -1);
                         this.isSending = false;
                         this.error = error.response?.statusText ?? error.message;
                     })

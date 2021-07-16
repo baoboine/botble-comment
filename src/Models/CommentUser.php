@@ -4,6 +4,7 @@
 namespace Botble\Comment\Models;
 
 use Botble\Base\Supports\Avatar;
+use Botble\Base\Traits\EnumCastable;
 use Botble\Media\Models\MediaFile;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -12,6 +13,7 @@ use RvMedia;
 
 class CommentUser extends Authenticatable
 {
+    use EnumCastable;
     use HasApiTokens;
 
     protected $table = 'bb_comment_users';

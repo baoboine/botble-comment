@@ -4,6 +4,15 @@ Route::group(['namespace' => 'Botble\Comment\Http\Controllers', 'middleware' => 
 
     Route::group(['prefix' => BaseHelper::getAdminPrefix(), 'middleware' => 'auth'], function () {
 
+        Route::group(['prefix' => 'comment-users', 'as' => 'comment-user.'], function () {
+            Route::resource('', 'CommentUserController')->parameters(['' => 'comment-user']);
+            Route::delete('items/destroy', [
+                'as'         => 'deletes',
+                'uses'       => 'CommentUserController@deletes',
+                'permission' => 'comment-user.destroy',
+            ]);
+        });
+
         Route::group(['prefix' => 'comments', 'as' => 'comment.'], function () {
             Route::resource('', 'CommentController')->parameters(['' => 'comment']);
             Route::delete('items/destroy', [

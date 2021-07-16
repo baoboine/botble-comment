@@ -11,6 +11,7 @@ use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
+use Botble\Comment\Events\NewCommentEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -51,14 +52,18 @@ class CommentFrontController extends BaseController
                 ->setMessage(__('Invalid reference'));
         }
 
+        $user = $request->user();
+
         $request->merge(array_merge(
             [
                 'ip_address'    => $request->ip(),
-                'user_id'       => $request->user()->getAuthIdentifier(),
+                'user_id'       => $user->getAuthIdentifier(),
             ], $reference
         ));
 
         $comment = $this->commentRepository->storageComment($request->input());
+
+        event(new NewCommentEvent($comment, $user));
 
         return $this->response->setData($comment);
     }
