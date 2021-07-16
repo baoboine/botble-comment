@@ -2,6 +2,8 @@
 
 # Botble plugin comment
 
+Demo: https://suyt.tech/which-company-would-you-choose
+
 ## Install
 
 - Clone and copy to your plugins folder
