@@ -12,9 +12,7 @@
                 </div>
 
                 <div v-show="!showEdit">
-                    <p>
-                        {{ comment.comment }}
-                    </p>
+                    <p v-html="linkify(comment.comment)"></p>
 
                     <div class="bb-comment-content-actions d-flex flex-wrap align-center">
                         <a class="reply" @click="replyIt" href="javascript:">{{ __('Reply') }}</a>
