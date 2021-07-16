@@ -217,7 +217,7 @@ class CommentFrontController extends BaseController
             $reference = json_decode(base64_decode($request->input('reference')), true);
 
             if (isset($reference['author']) && !empty($reference['author'])) {
-                Comment::$author = (object)$reference['author'];
+                Comment::$author = app($reference['author']['type'])->where(['id' => $reference['author']['id']])->first();
             }
 
             return $reference;

@@ -95,7 +95,7 @@ class Comment extends BaseModel
     public function getIsAuthorAttribute()
     {
         if (self::$author && $this->user) {
-            return $this->user_id === self::$author->id && $this->user->user_type === self::$author->type;
+            return $this->user->email === self::$author->email && $this->user->user_type === get_class(self::$author);
         }
         return false;
     }
