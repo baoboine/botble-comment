@@ -216,8 +216,7 @@ export default {
         },
         closeModalLogin(isSuccess = false) {
             this.showLoginForm = false;
-
-            if (isSuccess) {
+            if (isSuccess === true) {
                 this.getCurrentUserData();
             }
         },

@@ -80,16 +80,19 @@ class RegisterController extends BaseController
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array $data
+     * @param array $data
      * @return Member
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     protected function create(array $data)
     {
-        return $this->commentUserRepository->create([
+        return $this->commentUserRepository->create(array_merge([
             'name'      => $data['name'],
             'email'      => $data['email'],
             'password'   => bcrypt($data['password']),
-        ]);
+        ],
+            setting('enable_captcha') && is_plugin_active('captcha') ? ['g-recaptcha-response' => 'required|captcha'] : []
+        ));
     }
 
     public function registered(Request $request, $user, $response)
