@@ -13,5 +13,6 @@
         logout-url="{{ route('comment.logout') }}"
         register-url="{{ route('public.comment.register') }}"
         recommend-url="{{ route('comment.recommend') }}"
+        captcha="{{ setting('enable_captcha') && is_plugin_active('captcha') ? Captcha::display() : '' }}"
     ></comment>
 </div>

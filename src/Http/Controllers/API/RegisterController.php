@@ -70,11 +70,13 @@ class RegisterController extends BaseController
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        return Validator::make($data, array_merge([
             'name'       => 'required|max:255',
             'email'      => 'required|email|max:255|unique:bb_comment_users',
             'password'   => 'required|min:6|confirmed',
-        ]);
+        ],
+            setting('enable_captcha') && is_plugin_active('captcha') ? ['g-recaptcha-response' => 'required|captcha'] : []
+        ));
     }
 
     /**
@@ -86,13 +88,11 @@ class RegisterController extends BaseController
      */
     protected function create(array $data)
     {
-        return $this->commentUserRepository->create(array_merge([
+        return $this->commentUserRepository->create([
             'name'      => $data['name'],
             'email'      => $data['email'],
             'password'   => bcrypt($data['password']),
-        ],
-            setting('enable_captcha') && is_plugin_active('captcha') ? ['g-recaptcha-response' => 'required|captcha'] : []
-        ));
+        ]);
     }
 
     public function registered(Request $request, $user, $response)

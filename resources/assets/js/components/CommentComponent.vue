@@ -123,6 +123,10 @@ export default {
             type: String,
             required: true,
         },
+        captcha: {
+            type: String,
+            default: ''
+        }
     },
     methods: {
         async getCurrentUserData() {
@@ -175,7 +179,10 @@ export default {
                 }, data => {
                     this.isLoadMore = false;
                     this.comments = this.comments.concat(data.data.comments);
-                    this.reactive.attrs = data.data.attrs;
+                    this.reactive.attrs = {
+                        ...data.data.attrs,
+                        count_all: this.reactive.attrs.count_all,
+                    };
                 })
             }
         },
@@ -274,6 +281,7 @@ export default {
             logoutUrl: this.logoutUrl,
             loginUrl: this.loginUrl,
             recommendUrl: this.recommendUrl,
+            captcha: this.captcha,
         }
     }
 }

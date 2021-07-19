@@ -56,7 +56,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
                     </div>
-                    <input type="email" autofocus="true" class="form-control form-control-lg" name="email" :placeholder="__('Enter email')" :value="loggedUser.email" required="">
+                    <input type="email" autofocus="true" class="form-control form-control-lg" name="email" :placeholder="__('Enter email')"  required="">
                 </div>
             </div>
             <div class="form-group">
@@ -76,7 +76,10 @@
                     <input class="form-control form-control-lg" :placeholder="__('Confirm Password')" name="password_confirmation" type="password" required="">
                 </div>
             </div>
+
+            <div v-html="captcha" />
         </div>
+
 
         <div class="d-block d-sm-flex justify-content-between align-items-center mt-2" slot="footer" v-if="isRegistering">
             <div>
@@ -119,6 +122,15 @@ export default {
             required: true,
         }
     },
+    watch: {
+        isRegistering() {
+            if (this.isRegistering && window.grecaptcha) {
+                setTimeout(() => {
+                    this.$el.querySelector('.g-recaptcha') && grecaptcha?.render(this.$el.querySelector('.g-recaptcha'));
+                }, 500)
+            }
+        }
+    },
     methods: {
         onSuccess({ data }) {
             this.isLoading = false;
@@ -131,6 +143,7 @@ export default {
                 return;
             }
 
+            this.setErrors(false);
             Ls.set('auth.token', data.data.token);
             this.onClose(true);
         },
@@ -156,9 +169,14 @@ export default {
         onSubmit(e) {
             this.isLoading = true;
             const formData = $(e.target).serializeData();
+
+            if (formData.g?.recaptcha) {
+                formData['g-recaptcha-response'] = formData.g.recaptcha.response;
+            }
+
             Http.post(!this.isRegistering ? this.loginUrl : this.registerUrl, formData).then(this.onSuccess, this.onError);
         },
     },
-    inject: ['loggedUser', 'loginUrl', 'registerUrl']
+    inject: ['loggedUser', 'loginUrl', 'registerUrl', 'captcha']
 }
 </script>

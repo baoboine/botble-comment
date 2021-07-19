@@ -90,12 +90,19 @@ class HookServiceProvider extends ServiceProvider
         Theme::asset()
             ->container('footer')
             ->usePath(false)
-            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '2.0');
+            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '3.0');
 
         Theme::asset()
             ->usePath(false)
             ->add('font-awesome-5', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
             ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css');
+
+        if (setting('enable_captcha') && is_plugin_active('captcha')) {
+            Theme::asset()
+                ->container('footer')
+                ->usePath(false)
+                ->add('google-captcha-api', 'https://www.google.com/recaptcha/api.js?hl=en');
+        }
     }
 
     /**

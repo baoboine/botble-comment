@@ -77,7 +77,7 @@ class CommentUserTable extends TableAbstract
 
         $query = $model->select($select);
 
-        return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
+        return $this->applyScopes($query);
     }
 
     /**

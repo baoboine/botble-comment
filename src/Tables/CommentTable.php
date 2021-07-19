@@ -94,7 +94,7 @@ class CommentTable extends TableAbstract
             ->with(['reference'])
             ->select($select);
 
-        return $this->applyScopes(apply_filters(BASE_FILTER_TABLE_QUERY, $query, $model, $select));
+        return $this->applyScopes($query);
     }
 
     /**
