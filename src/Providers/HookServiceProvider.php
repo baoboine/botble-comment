@@ -101,7 +101,7 @@ class HookServiceProvider extends ServiceProvider
             Theme::asset()
                 ->container('footer')
                 ->usePath(false)
-                ->add('google-captcha-api', 'https://www.google.com/recaptcha/api.js?hl=en');
+                ->add('google-recaptcha', 'https://www.google.com/recaptcha/api.js?hl='. app()->getLocale());
         }
     }
 
