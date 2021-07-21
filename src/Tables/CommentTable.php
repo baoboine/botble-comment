@@ -64,7 +64,7 @@ class CommentTable extends TableAbstract
                 return Html::link($item->reference->url . '#bb-comment', $item->reference->name, ['target' => '_blank']);
             })
             ->editColumn('user', function($item) {
-                return $item->user->name;
+                return $item->user ? $item->user->name : 'Guest';
             })
             ->editColumn('status', function ($item) {
                 return $item->status->toHtml();
@@ -104,32 +104,26 @@ class CommentTable extends TableAbstract
     {
         return [
             'id' => [
-                'name'  => 'id',
                 'title' => trans('core/base::tables.id'),
                 'width' => '20px',
             ],
             'comment' => [
-                'name'  => 'comment',
                 'title' => trans('plugins/comment::comment.name'),
                 'class' => 'text-left',
             ],
             'user' => [
-                'name'  => 'comment',
                 'title' => trans('plugins/comment::comment.user'),
                 'class' => 'text-left',
             ],
             'reference' => [
-                'name'  => 'reference',
                 'title' => trans('plugins/comment::comment.article'),
                 'class' => 'text-left',
             ],
             'created_at' => [
-                'name'  => 'created_at',
                 'title' => trans('core/base::tables.created_at'),
                 'width' => '100px',
             ],
             'status' => [
-                'name'  => 'status',
                 'title' => trans('core/base::tables.status'),
                 'width' => '100px',
             ],
@@ -193,7 +187,7 @@ class CommentTable extends TableAbstract
     {
         if ((int)request()->input('start', -1) === 0) {
             $latestId = $this->repository->getModel()->latest()->first();
-            if ((int)setting('admin-comment_latest_viewed_id', 0) !== $latestId) {
+            if ($latestId && (int)setting('admin-comment_latest_viewed_id', 0) !== $latestId) {
                 app(SettingStore::class)->set('admin-comment_latest_viewed_id', $latestId->id)->save();
             }
         }

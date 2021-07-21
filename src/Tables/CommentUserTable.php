@@ -59,7 +59,7 @@ class CommentUserTable extends TableAbstract
 
         return apply_filters(BASE_FILTER_GET_LIST_DATA, $data, $this->repository->getModel())
             ->addColumn('operations', function ($item) {
-                return $this->getOperations(false, 'comment.destroy', $item);
+                return $this->getOperations(false, 'comment-user.destroy', $item);
             })
             ->escapeColumns([])
             ->make(true);
@@ -110,7 +110,7 @@ class CommentUserTable extends TableAbstract
      */
     public function buttons()
     {
-        $buttons = $this->addCreateButton(route('comment.create'), 'comment.create');
+        $buttons = $this->addCreateButton(route('comment-user.create'), 'comment-user.create');
 
         return apply_filters(BASE_FILTER_TABLE_BUTTONS, $buttons, Comment::class);
     }
@@ -120,7 +120,7 @@ class CommentUserTable extends TableAbstract
      */
     public function bulkActions(): array
     {
-        return $this->addDeleteAction(route('comment.deletes'), 'comment.destroy', parent::bulkActions());
+        return $this->addDeleteAction(route('comment-user.deletes'), 'comment-user.destroy', parent::bulkActions());
     }
 
     /**
