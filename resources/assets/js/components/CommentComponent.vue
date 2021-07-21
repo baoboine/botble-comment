@@ -146,6 +146,7 @@ export default {
                 params: {
                     reference: this.reference,
                     sort: this.reactive.sort,
+                    _t: new Date().getTime(),
                     ...params,
                 }
             })

@@ -90,7 +90,7 @@ class HookServiceProvider extends ServiceProvider
         Theme::asset()
             ->container('footer')
             ->usePath(false)
-            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '3.0');
+            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '3.2');
 
         Theme::asset()
             ->usePath(false)
