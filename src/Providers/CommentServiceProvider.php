@@ -78,7 +78,7 @@ class CommentServiceProvider extends ServiceProvider
             ->publishAssets()
             ->loadAndPublishTranslations()
             ->loadAndPublishViews()
-            ->loadRoutes(['web', 'api']);
+            ->loadRoutes(['web', has_passport() ? 'api' : 'ajax']);
 
         $this->app->register(EventServiceProvider::class);
 

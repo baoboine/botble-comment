@@ -12,6 +12,8 @@
         </div>
 
         <div class="mt-4" slot="body" v-if="!isRegistering">
+            <input class="hrv-checkbox d-none" checked="checked" name="remember" type="checkbox" value="1">
+
             <div class="form-group" key="email">
                 <div class="input-group">
                     <div class="input-group-prepend">

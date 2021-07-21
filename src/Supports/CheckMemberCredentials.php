@@ -24,13 +24,17 @@ class CheckMemberCredentials
 
     public function handle(Request $request)
     {
-        $user = (new TokenGuard(
-            $this->app->make(ResourceServer::class),
-            new PassportUserProvider(Auth::createUserProvider($this->provider), $this->provider),
-            $this->app->make(TokenRepository::class),
-            $this->app->make(ClientRepository::class),
-            $this->app->make('encrypter')
-        ))->user($request);
+        if (has_passport()) {
+            $user = (new TokenGuard(
+                $this->app->make(ResourceServer::class),
+                new PassportUserProvider(Auth::createUserProvider($this->provider), $this->provider),
+                $this->app->make(TokenRepository::class),
+                $this->app->make(ClientRepository::class),
+                $this->app->make('encrypter')
+            ))->user($request);
+        } else {
+            $user = auth()->guard(COMMENT_GUARD)->user();
+        }
 
         if ($user) {
             app('auth')->guard(COMMENT_GUARD)->setUser($user);

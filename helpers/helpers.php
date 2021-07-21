@@ -23,3 +23,11 @@ if (!function_exists('has_member'))
         return $config;
     }
 }
+
+if (!function_exists('has_passport'))
+{
+    function has_passport(): bool
+    {
+        return class_exists('Laravel\Passport\Passport');
+    }
+}
