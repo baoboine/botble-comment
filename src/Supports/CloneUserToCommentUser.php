@@ -24,7 +24,7 @@ class CloneUserToCommentUser
      */
     public function handle(Request $request)
     {
-        if ($user = $request->user() ?: auth()->guard('member')->user()) {
+        if ($user = $request->user() ?: (config('auth.guards.member') && auth()->guard('member')->user())) {
             return $this->commentUser->createOrUpdate([
                 'email' => $user->email,
                 'password' => $user->password,

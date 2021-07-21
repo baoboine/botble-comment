@@ -205,6 +205,11 @@ class CommentController extends BaseController
             return $response->setError();
         }
 
-        return $response->setData(['token' => $clonedUser->createToken('Comment User Login')->accessToken]);
+        if (has_passport()) {
+            return $response->setData(['token' => $clonedUser->createToken('Comment User Login')->accessToken]);
+        }
+
+        auth()->guard(COMMENT_GUARD)->loginUsingId($clonedUser->id);
+        return $response->setData(['token' => $clonedUser->id]);
     }
 }
