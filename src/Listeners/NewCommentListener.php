@@ -5,9 +5,7 @@ namespace Botble\Comment\Listeners;
 use Botble\Comment\Events\NewCommentEvent;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use EmailHandler;
-use Html;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use URL;
 
 class NewCommentListener implements ShouldQueue
 {
@@ -42,7 +40,7 @@ class NewCommentListener implements ShouldQueue
                         'comment_content'   => $event->comment->comment,
                     ]);
 
-                $mailer->sendUsingTemplate('notify_email', $sendTo);
+                $mailer->sendUsingTemplate('new-reply', $sendTo);
             }
         }
     }

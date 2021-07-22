@@ -210,6 +210,7 @@ class CommentController extends BaseController
         }
 
         auth()->guard(COMMENT_GUARD)->loginUsingId($clonedUser->id);
+
         return $response->setData(['token' => $clonedUser->id]);
     }
 }

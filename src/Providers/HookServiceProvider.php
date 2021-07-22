@@ -7,6 +7,7 @@ use Botble\ACL\Models\User;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Member\Models\Member;
 use Illuminate\Support\ServiceProvider;
+use MacroableModels;
 use Theme;
 use Html;
 
@@ -33,7 +34,9 @@ class HookServiceProvider extends ServiceProvider
      */
     public function renderComment()
     {
-        if (!setting('comment_enable')) return null;
+        if (!setting('comment_enable')) {
+            return null;
+        }
 
         $this->loadAssets();
 
@@ -82,9 +85,6 @@ class HookServiceProvider extends ServiceProvider
         return null;
     }
 
-    /**
-     *
-     */
     protected function loadAssets()
     {
         Theme::asset()
@@ -111,7 +111,7 @@ class HookServiceProvider extends ServiceProvider
     protected function registerAttribute()
     {
         if (has_member()) {
-            \MacroableModels::addMacro(Member::class, 'getNameAttribute', function() {
+            MacroableModels::addMacro(Member::class, 'getNameAttribute', function() {
                 return $this->first_name.' '. $this->last_name;
             });
         }

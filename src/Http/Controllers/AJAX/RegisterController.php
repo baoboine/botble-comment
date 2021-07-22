@@ -11,9 +11,6 @@ use Botble\Member\Repositories\Interfaces\MemberInterface;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use SeoHelper;
-use Theme;
-use URL;
 
 class RegisterController extends Controller
 {

@@ -60,16 +60,16 @@ $heart-size: 1.8em;
     cursor: pointer;
     height: 50px;
     width: 50px;
-    background-image:url( 'https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png');
+    background-image: url('/vendor/core/plugins/comment/images/heart-animation.png');
     background-position: left;
-    background-repeat:no-repeat;
-    background-size:2900%;
+    background-repeat: no-repeat;
+    background-size: 2900%;
     transition: none;
     margin-top: -9px;
     margin-left: -9px;
 
     &:hover, &.ok {
-        background-position:right;
+        background-position: right;
     }
 
     &.ok {
@@ -84,6 +84,10 @@ $heart-size: 1.8em;
 }
 
 @keyframes heart-burst {
-    from {background-position:left;}
-    to { background-position:right;}
+    from {
+        background-position: left;
+    }
+    to {
+        background-position: right;
+    }
 }

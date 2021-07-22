@@ -22,9 +22,9 @@ Route::group(['namespace' => 'Botble\Comment\Http\Controllers', 'middleware' => 
             ]);
 
             Route::post('save/setting', [
-                'as'        => 'storage-settings',
-                'uses'      => 'CommentController@storeSettings',
-                'permission'    => 'setting.options'
+                'as'         => 'storage-settings',
+                'uses'       => 'CommentController@storeSettings',
+                'permission' => 'setting.options',
             ]);
         });
 

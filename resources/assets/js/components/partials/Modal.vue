@@ -30,7 +30,7 @@
 
 <script>
 export default {
-    name: "Modal",
+    name: 'Modal',
     props:{
         show:{
             type: Boolean,

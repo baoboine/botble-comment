@@ -9,16 +9,16 @@
         </div>
 
         <div class="mt-4 d-flex justify-content-center" slot="footer">
-            <button class="btn btn-secondary btn-lg" @click="() => onOK(false)">Cancel</button>
-            <button class="btn btn-warning btn-lg" @click="() => onOK(true)">OK</button>
+            <button class="btn btn-secondary btn-lg" @click="() => onOK(false)">{{ __('Cancel') }}</button>
+            <button class="btn btn-warning btn-lg" @click="() => onOK(true)">{{ __('OK') }}</button>
         </div>
     </modal>
 </template>
 
 <script>
-import Modal from "./Modal";
+import Modal from './Modal';
 export default {
-    name: "ConfirmDialog",
+    name: 'ConfirmDialog',
     components: {
         Modal,
     },

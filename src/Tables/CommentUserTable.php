@@ -10,7 +10,6 @@ use Botble\Table\Abstracts\TableAbstract;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Yajra\DataTables\DataTables;
 use Botble\Comment\Models\Comment;
-use Html;
 
 class CommentUserTable extends TableAbstract
 {
@@ -70,12 +69,7 @@ class CommentUserTable extends TableAbstract
      */
     public function query()
     {
-        $model = $this->repository->getModel();
-        $select = [
-            '*'
-        ];
-
-        $query = $model->select($select);
+        $query = $this->repository->getModel()->select(['*']);
 
         return $this->applyScopes($query);
     }

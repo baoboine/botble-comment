@@ -12,7 +12,7 @@
 import Http from '../../service/http';
 
 export default {
-    name: "Avatar",
+    name: 'Avatar',
     props: {
         user: {
             type: Object,
@@ -30,7 +30,7 @@ export default {
                 const formData = new FormData();
                 formData.append('photo', e.target.files[0]);
 
-                Http.post(this.changeAvatarUrl, formData).then(res => {
+                Http.post(this.changeAvatarUrl, formData).then(() => {
                     window.location.reload();
                 })
             })

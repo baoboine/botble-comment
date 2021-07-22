@@ -2,28 +2,32 @@
 
 # Botble plugin comment
 
+This is a plugin for Botble CMS so you have to purchase Botble CMS first to use this plugin.
+
 Demo: https://suyt.tech/which-company-would-you-choose#bb-comment
 
 ## Install
 
-- Clone and copy to your plugins folder
-- Rename comment folder
-- Before enable you need to makesure Laravel Passport is installed or just update
-``` bash
-$ composer update
-```
-- Install passport if this is your first time
-```bash
-# update passport database
-$ php artisan migrate 
-# install key
-$ php artisan passport:install 
-```
-- You need to enable comment embed: Setting > Comment
+- For developers:
+    - Rename folder `botble-comment-main` to `comment`.
+    - Copy folder `toc` into `/platform/plugins`.
+    - Run `composer update` to install Passport.
+    - Run `php artisan migrate` to update the database.
+    - Run `php artisan passport:install` to generate keys for Passport.
+    - Run command `php artisan cms:plugin:activate comment` to activate this plugin.
+
+- For non-developers:
+    - Rename folder `botble-comment-main` to `comment`.
+    - Copy folder `toc` into `/platform/plugins`.
+    - Or go to Admin Panel -> Plugins and activate plugin Comment.
 
 ## Usage
-- Insert to your Article with ShortCode:
+
+### Auto embed
+- Go to Admin -> Setting -> Comments to enable comment.
+
+### Manually
+- Insert shortcode to your post's content:
 ``` php
 [comment][/comment]
 ```
-- Or auto embed to your article: Setting > Comment

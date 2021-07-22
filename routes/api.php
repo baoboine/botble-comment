@@ -3,25 +3,25 @@
 if (defined('THEME_MODULE_SCREEN_NAME')) {
 
     Route::group([
-        'prefix'     => 'comment/api/v1',
+        'prefix'     => 'api/v1/comments',
         'namespace'  => 'Botble\Comment\Http\Controllers\API',
         'middleware' => ['api'],
     ], function () {
 
         Route::group([
-            'as'         => 'public.comment.',
-        ], function() {
+            'as' => 'public.comment.',
+        ], function () {
             Route::post('login', 'LoginController@login')->name('login');
             Route::post('register', 'RegisterController@register')->name('register');
         });
 
         Route::group([
-            'as'         => 'comment.'
+            'as' => 'comment.',
         ], function () {
 
             Route::group([
                 'middleware' => ['auth:comment-api', 'throttle:comment'],
-            ], function() {
+            ], function () {
 
                 Route::post('logout', 'LoginController@logout')->name('logout');
 

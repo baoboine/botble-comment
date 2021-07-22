@@ -42,7 +42,7 @@ import Http from '../../service/http';
 import Ls from '../../service/Ls';
 
 export default {
-    name: "Header",
+    name: 'Header',
     data: () => {
         return {
             isRecommended: false,
@@ -51,7 +51,7 @@ export default {
     },
     methods: {
         logout() {
-            Http.post(this.logoutUrl).then(res => {
+            Http.post(this.logoutUrl).then(() => {
                 Ls.remove('auth.token');
                 this.getUser();
             });
@@ -76,7 +76,7 @@ export default {
         },
     },
     watch: {
-        recommend(newVal, oldVal) {
+        recommend() {
             if (typeof this.recommend.isRecommended !== 'undefined') {
                 this.isRecommended = this.recommend.isRecommended;
                 this.countRecommend = this.recommend.count;

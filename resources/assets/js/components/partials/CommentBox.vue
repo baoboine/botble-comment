@@ -30,12 +30,12 @@
 </template>
 
 <script>
-import Avatar from "./Avatar";
-import { setResizeListeners } from "../helpers";
+import Avatar from './Avatar';
+import { setResizeListeners } from '../helpers';
 import Http from '../../service/http';
 
 export default {
-    name: "CommentBox",
+    name: 'CommentBox',
     components: {
         avatar: Avatar,
     },
@@ -114,7 +114,7 @@ export default {
         }
     },
     mounted() {
-        setResizeListeners(this.$el, "textarea");
+        setResizeListeners(this.$el, 'textarea');
 
         if (this.autoFocus) {
             this.$el.querySelector('textarea').focus()
