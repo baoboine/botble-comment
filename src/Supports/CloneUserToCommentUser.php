@@ -26,11 +26,11 @@ class CloneUserToCommentUser
     {
         if ($user = $request->user() ?: (config('auth.guards.member') && auth()->guard('member')->user())) {
             return $this->commentUser->createOrUpdate([
-                'email' => $user->email,
-                'password' => $user->password,
+                'email'     => $user->email,
+                'password'  => $user->password,
                 'avatar_id' => $user->avatar_id,
                 'user_type' => get_class($user),
-                'name'  => join(' ', [$user->first_name, $user->last_name])
+                'name'      => join(' ', [$user->first_name, $user->last_name]),
             ], ['email' => $user->email]);
         }
 

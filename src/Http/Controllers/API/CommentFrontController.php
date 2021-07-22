@@ -12,6 +12,7 @@ use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Botble\Comment\Events\NewCommentEvent;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -20,10 +21,19 @@ use RvMedia;
 
 class CommentFrontController extends BaseController
 {
+    /**
+     * @var BaseHttpResponse
+     */
     protected $response;
 
+    /**
+     * @var CommentInterface
+     */
     protected $commentRepository;
 
+    /**
+     * @var CheckMemberCredentials
+     */
     protected $memberCredentials;
 
     public function __construct(BaseHttpResponse $response, CommentInterface $commentRepository, CheckMemberCredentials $memberCredentials)
@@ -81,7 +91,7 @@ class CommentFrontController extends BaseController
         $limit = $request->input('limit', 5);
         $sort = $request->input('sort', 'newest');
 
-        list($comments, $attrs) = $this->commentRepository->getComments($reference, $parentId, $page, $limit, $sort);
+        [$comments, $attrs] = $this->commentRepository->getComments($reference, $parentId, $page, $limit, $sort);
 
         return $this->response
             ->setData([
@@ -104,7 +114,7 @@ class CommentFrontController extends BaseController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteComment(Request $request)
     {
@@ -226,7 +236,7 @@ class CommentFrontController extends BaseController
             }
 
             return $reference;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }

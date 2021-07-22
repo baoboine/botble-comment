@@ -1,4 +1,4 @@
-$prefix: "bb-";
+$prefix: 'bb-';
 $primaryColor: var(--color-1st, #0088cc);
 .#{$prefix}comment-wrapper {
     @import '~bootstrap/scss/bootstrap';
@@ -57,6 +57,7 @@ $primaryColor: var(--color-1st, #0088cc);
 
             &-bottom {
                 margin-bottom: 1rem;
+
                 .recommend-btn {
                     i {
                         color: red;
@@ -67,6 +68,7 @@ $primaryColor: var(--color-1st, #0088cc);
 
         &-box {
             margin-bottom: 1rem;
+
             .#{$prefix}textarea {
                 flex: 1;
 
@@ -83,8 +85,9 @@ $primaryColor: var(--color-1st, #0088cc);
                         display: none;
                     }
 
-                    &:focus, &.focused{
+                    &:focus, &.focused {
                         min-height: 60px;
+
                         & + div {
                             display: flex;
                         }
@@ -105,6 +108,7 @@ $primaryColor: var(--color-1st, #0088cc);
                     border: 1px solid #ced4da;
                     border-top: 0;
                     border-radius: 0 0 5px 5px;
+
                     .post-btn {
                         background-color: $primaryColor;
                         border: none;
@@ -201,6 +205,7 @@ $primaryColor: var(--color-1st, #0088cc);
 
             &-user {
                 margin-top: -6px;
+
                 .time {
                     font-size: 12px;
                 }
@@ -241,6 +246,7 @@ $primaryColor: var(--color-1st, #0088cc);
 
     $spinnerWidth: 40px;
     $spinnerWidthMini: 20px;
+
     .bb-loading {
         box-sizing: border-box;
 
@@ -297,8 +303,8 @@ $primaryColor: var(--color-1st, #0088cc);
     }
 }
 
-@import "./dialog";
-@import "./button";
+@import './dialog';
+@import './button';
 @import './heart';
 
 

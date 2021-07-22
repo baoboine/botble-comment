@@ -72,11 +72,7 @@
 
             </div>
 
-
         </div>
-
-
-
 
         <div class="flexbox-annotated-section" style="border: none">
             <div class="flexbox-annotated-section-annotation">

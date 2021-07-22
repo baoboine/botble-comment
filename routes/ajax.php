@@ -3,39 +3,37 @@
 if (defined('THEME_MODULE_SCREEN_NAME')) {
 
     Route::group([
-        'prefix'     => 'comment/ajax/v1',
+        'prefix'     => 'ajax/v1/comments',
         'middleware' => ['web'],
     ], function () {
 
         Route::group([
-            'namespace'  => 'Botble\Comment\Http\Controllers\AJAX',
-        ], function() {
+            'namespace' => 'Botble\Comment\Http\Controllers\AJAX',
+        ], function () {
 
             Route::group([
-                'as'         => 'public.comment.',
-            ], function() {
+                'as' => 'public.comment.',
+            ], function () {
 
                 Route::post('login', 'LoginController@login')->name('login');
                 Route::post('register', 'RegisterController@register')->name('register');
             });
 
             Route::post('logout', [
-                'uses'          => 'LoginController@logout',
-                'middleware'    => 'auth:'. COMMENT_GUARD,
+                'uses'       => 'LoginController@logout',
+                'middleware' => 'auth:' . COMMENT_GUARD,
             ])->name('comment.logout');
 
         });
 
         Route::group([
-            'as'         => 'comment.',
-            'namespace'  => 'Botble\Comment\Http\Controllers\API',
+            'as'        => 'comment.',
+            'namespace' => 'Botble\Comment\Http\Controllers\API',
         ], function () {
 
             Route::group([
-                'middleware' => ['auth:'. COMMENT_GUARD, 'throttle:comment'],
-            ], function() {
-
-
+                'middleware' => ['auth:' . COMMENT_GUARD, 'throttle:comment'],
+            ], function () {
 
                 Route::post('postComment', 'CommentFrontController@postComment')->name('post');
                 Route::post('user', 'CommentFrontController@userInfo')->name('user');

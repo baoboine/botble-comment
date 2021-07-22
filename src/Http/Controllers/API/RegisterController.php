@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Botble\Comment\Http\Controllers\API;
-
 
 use Botble\ACL\Traits\RegistersUsers;
 use Botble\Base\Http\Controllers\BaseController;
@@ -101,6 +99,5 @@ class RegisterController extends BaseController
 
         return $response
             ->setData(compact('token'));
-//        return app(BaseHttpResponse::class)->setData($user);
     }
 }

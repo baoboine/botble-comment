@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Botble\Comment\Http\Controllers\API;
-
 
 use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
@@ -87,9 +85,9 @@ class LoginController extends BaseController
     protected function attemptLogin(Request $request)
     {
         if ($this->guard()->validate($this->credentials($request))) {
-
             return $this->baseAttemptLogin($request);
         }
+
         return false;
     }
 
@@ -116,6 +114,7 @@ class LoginController extends BaseController
                 'token' => $token,
             ]);
         }
+
         return $this->sendBaseLoginResponse($request);
     }
 }

@@ -5,7 +5,7 @@
 
             <div class="bb-comment-content w-100">
                 <div class="bb-comment-content-user">
-                    <strong>{{ comment.user ? comment.user.name || `${comment.user.first_name} ${comment.user.last_name}` : "Guest" }}</strong>
+                    <strong>{{ comment.user ? comment.user.name || `${comment.user.first_name} ${comment.user.last_name}` : 'Guest' }}</strong>
                     <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
                     <span class="px-2">•</span>
                     <span class="time">{{ !comment.isSending ? comment.time : 'sending...' }}</span>
@@ -66,7 +66,7 @@ import CommentBox from "./CommentBox";
 import Http from '../../service/http';
 
 export default {
-    name: "CommentItem",
+    name: 'CommentItem',
     data() {
         return {
             showReply: false,
@@ -174,9 +174,9 @@ export default {
 
             Http.post(this.likeUrl, {
                 id: this.comment.id,
-            }).then(res => {
+            }).then(() => {
 
-            })
+            });
         }
     },
     inject: ['data', 'deleteUrl', 'showConfirm', 'updateCount', 'apiLoadComments', 'setSoftLoading', 'likeUrl']

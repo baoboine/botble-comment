@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Botble\Comment\Models;
 
 use Botble\Base\Supports\Avatar;
@@ -10,7 +9,6 @@ use Illuminate\Container\Container;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\PersonalAccessTokenFactory;
 use RvMedia;
-
 
 class CommentUser extends Authenticatable
 {
@@ -69,8 +67,8 @@ class CommentUser extends Authenticatable
     /**
      * Create a new personal access token for the user.
      *
-     * @param  string  $name
-     * @param  array  $scopes
+     * @param string $name
+     * @param array $scopes
      */
     public function createToken($name, array $scopes = [])
     {

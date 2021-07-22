@@ -1,5 +1,5 @@
 function resize() {
-    this.style.height = "auto";
+    this.style.height = 'auto';
     this.style.height = `${this.scrollHeight}px`;
 }
 

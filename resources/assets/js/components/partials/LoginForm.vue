@@ -102,7 +102,7 @@ import Http from '../../service/http';
 import Ls from '../../service/Ls';
 
 export default {
-    name: "LoginForm",
+    name: 'LoginForm',
     data: () => {
         return {
             isLoading: false,

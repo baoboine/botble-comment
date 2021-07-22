@@ -3,7 +3,6 @@
 namespace Botble\Comment\Tables;
 
 use Auth;
-use BaseHelper;
 use Botble\Base\Enums\BaseStatusEnum;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Setting\Supports\SettingStore;
@@ -85,14 +84,9 @@ class CommentTable extends TableAbstract
      */
     public function query()
     {
-        $model = $this->repository->getModel();
-        $select = [
-            '*'
-        ];
-
-        $query = $model
+        $query = $this->repository->getModel()
             ->with(['reference'])
-            ->select($select);
+            ->select(['*']);
 
         return $this->applyScopes($query);
     }

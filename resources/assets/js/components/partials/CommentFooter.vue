@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: "CommentFooter"
+    name: 'CommentFooter'
 }
 </script>
 

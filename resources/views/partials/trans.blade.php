@@ -1,7 +1,4 @@
 <script>
-    window.trans = {
-
-
-    }
-
+    'use strict';
+    window.trans = {};
 </script>
