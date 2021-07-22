@@ -18,7 +18,7 @@ Demo: https://suyt.tech/which-company-would-you-choose#bb-comment
 
 - For non-developers:
     - Rename folder `botble-comment-main` to `comment`.
-    - Copy folder `toc` into `/platform/plugins`.
+    - Copy folder `comment` into `/platform/plugins`.
     - Or go to Admin Panel -> Plugins and activate plugin Comment.
 
 ## Usage
