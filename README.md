@@ -10,7 +10,7 @@ Demo: https://suyt.tech/which-company-would-you-choose#bb-comment
 
 - For developers:
     - Rename folder `botble-comment-main` to `comment`.
-    - Copy folder `toc` into `/platform/plugins`.
+    - Copy folder `comment` into `/platform/plugins`.
     - Run `composer update` to install Passport.
     - Run `php artisan migrate` to update the database.
     - Run `php artisan passport:install` to generate keys for Passport.
