@@ -71,7 +71,15 @@ class CommentFrontController extends BaseController
             ], $reference
         ));
 
-        $comment = $this->commentRepository->storageComment($request->input());
+        $comment = $this->commentRepository->storageComment($request->only([
+            'ip_address',
+            'user_id',
+            'reference_id',
+            'reference_type',
+            'reference',
+            'comment',
+            'parent_id'
+        ]));
 
         event(new NewCommentEvent($comment, $user));
 
