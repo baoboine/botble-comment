@@ -52,6 +52,16 @@ export default {
             }
         }
     },
+    watch: {
+        show() {
+            if (this.show) {
+                document.body.insertBefore(this.$el, document.body.firstChild)
+                document.body.classList.add('bb-dialog-shown');
+            } else {
+                document.body.classList.remove('bb-dialog-shown');
+            }
+        }
+    },
     mounted() {
 
     }

@@ -234,7 +234,7 @@ export default {
             });
         },
         onChangeSort(sort) {
-            this.reactive.sort = sort;
+            this.reactive.sort = sort.value;
             this.loadComments();
         },
         async checkCurrentUser(cb) {

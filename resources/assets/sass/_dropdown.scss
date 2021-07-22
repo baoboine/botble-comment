@@ -1,0 +1,107 @@
+$dropdownMinWidth: 80px;
+.bb-dropdown {
+    min-width: $dropdownMinWidth;
+    height: 30px;
+    position: relative;
+    margin: 10px 1px;
+    display: inline-block;
+    vertical-align: middle;
+
+    a:hover {
+        text-decoration: none;
+    }
+
+    &.no-caret {
+
+        .bb-dropdown-toggle {
+            padding-right: 0 !important;
+        }
+    }
+
+    &-toggle {
+        color: #636b6f;
+        min-width: $dropdownMinWidth;
+        padding: 5px 30px 5px 10px;
+        text-transform: none;
+        margin-bottom: 7px;
+        border: 0;
+        background-size: 0 2px, 100% 1px;
+        background-repeat: no-repeat;
+        background-position: center bottom, center calc(100% - 1px);
+        background-color: transparent;
+        transition: background 0s ease-out;
+        float: none;
+        box-shadow: none;
+        border-radius: 0;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:hover {
+            background: #e1e1e1;
+            cursor: pointer;
+        }
+
+        .caret {
+            width: 0;
+            position: absolute;
+            top: 19px;
+            height: 0;
+            margin-left: -24px;
+            vertical-align: middle;
+            border-top: 4px dashed;
+            border-top: 4px solid \9;
+            border-right: 4px solid transparent;
+            border-left: 4px solid transparent;
+            right: 10px;
+        }
+    }
+
+    &-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        float: left;
+        min-width: 160px;
+        padding: 5px 0;
+        margin: 2px 0 0;
+        list-style: none;
+        font-size: 14px;
+        text-align: left;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        background-clip: padding-box;
+
+        > li {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            margin: 0;
+
+            > a {
+                padding: 10px 30px;
+                display: block;
+                clear: both;
+                font-weight: normal;
+                line-height: 1.6;
+                color: #333333;
+                white-space: nowrap;
+                text-decoration: none;
+
+                &:hover {
+                    background: #efefef;
+                    color: #409FCB;
+                }
+            }
+        }
+    }
+
+
+
+    li {
+        list-style: none;
+    }
+}

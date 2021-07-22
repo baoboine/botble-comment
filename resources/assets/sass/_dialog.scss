@@ -5,9 +5,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, 0.25);
     display: table;
     transition: opacity .3s ease;
+    &:after {
+        content: "";
+        -webkit-filter: blur(4px);
+        filter: blur(4px);
+    }
 }
 
 .bb-dialog-wrapper {
@@ -20,9 +25,9 @@
         padding: 50px;
         background-color: #fff;
         border-radius: 5px;
-        box-shadow: 0 .75rem 1.5rem rgba(18, 38, 63, .03) !important;
         transition: all .3s ease;
         position: relative;
+        box-shadow: 0 0 0 1px rgb(64 87 109 / 7%), 0 2px 18px rgb(47 64 80 / 25%);
 
         .bb-dialog-header {
             text-align: center;
@@ -87,4 +92,13 @@
 .bb-dialog-leave .bb-dialog-container {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
+}
+
+
+body.bb-dialog-shown {
+
+    & > *:not(.bb-dialog-mask) {
+        filter: blur(4px);
+        -webkit-filter: blur(4px);
+    }
 }

@@ -3,16 +3,16 @@
         <div class="bb-comment-header-top d-flex justify-content-between">
             <strong>{{ data.attrs.count_all }} {{ __('Comments') }}</strong>
 
-            <div class="btn-group">
-                <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @click="() => !isLogged && openLoginForm()">
-                    <i class="fas fa-comment"></i>
-                    {{ this.isLogged ? this.userData.name : 'Login' }}
-                    <i class="fas fa-sort-down" v-if="this.isLogged"></i>
-                </button>
-                <div class="dropdown-menu" v-show="this.isLogged">
-                    <a class="dropdown-item" href="javascript:" @click="logout">{{ __('Logout') }}</a>
-                </div>
-            </div>
+
+            <dropdown
+                @click="() => !isLogged && openLoginForm()"
+                icon="fas fa-comment"
+                :selected="{name: isLogged ? userData.name : 'Login'}"
+                :options="isLogged && [
+                    {name: __('Logout'), onClick: logout}
+                ]"
+                :no-select-mode="true"
+            />
         </div>
 
 
@@ -22,17 +22,27 @@
                 <span class="badge badge-secondary" v-if="countRecommend > 0">{{ countRecommend }}</span>
             </button>
 
-            <div class="btn-group">
-                <button type="button" class="btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{ __('Sort By') }} {{ data.sort }}
-                    <i class="fas fa-sort-down"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" v-bind:class="data.sort === 'newest' && 'active'" href="javascript:" @click="() => onChangeSort('newest')">{{ __('Newest') }}</a>
-                    <a class="dropdown-item" v-bind:class="data.sort === 'best' && 'active'" href="javascript:" @click="() => onChangeSort('best')">{{ __('Best') }}</a>
-                    <a class="dropdown-item" v-bind:class="data.sort === 'oldest' && 'active'" href="javascript:" @click="() => onChangeSort('oldest')">{{ __('Oldest') }}</a>
-                </div>
-            </div>
+            <dropdown
+                :selected="{name: __('Newest')}"
+                v-on:updateOption="onChangeSort"
+                :options="[
+                    {name: __('Newest'), value: 'newest'},
+                    {name: __('Best'), value: 'best'},
+                    {name: __('Oldest'), value: 'oldest'}
+                ]"
+            />
+
+<!--            <div class="btn-group">-->
+<!--                <button type="button" class="btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                    {{ __('Sort By') }} {{ data.sort }}-->
+<!--                    <i class="fas fa-sort-down"></i>-->
+<!--                </button>-->
+<!--                <div class="dropdown-menu">-->
+<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'newest' && 'active'" href="javascript:" @click="() => onChangeSort('newest')">{{ __('Newest') }}</a>-->
+<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'best' && 'active'" href="javascript:" @click="() => onChangeSort('best')">{{ __('Best') }}</a>-->
+<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'oldest' && 'active'" href="javascript:" @click="() => onChangeSort('oldest')">{{ __('Oldest') }}</a>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </template>
@@ -40,9 +50,13 @@
 <script>
 import Http from '../../service/http';
 import Ls from '../../service/Ls';
+import Dropdown from "./Dropdown";
 
 export default {
     name: 'Header',
+    components: {
+        Dropdown
+    },
     data: () => {
         return {
             isRecommended: false,
