@@ -2,7 +2,8 @@
     @import "~bootstrap/scss/mixins";
     @import "~bootstrap/scss/functions";
     @import "~bootstrap/scss/variables";
-    @import '~bootstrap/scss/_buttons.scss';
+    @import '~bootstrap/scss/buttons';
+    @import "~bootstrap/scss/utilities";
     position: fixed;
     z-index: 9998;
     top: 0;
