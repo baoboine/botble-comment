@@ -62,6 +62,9 @@ export default {
             }
         }
     },
+    beforeDestroy() {
+        document.body.classList.remove('bb-dialog-shown');
+    },
     mounted() {
 
     }

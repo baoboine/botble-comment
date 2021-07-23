@@ -13,6 +13,10 @@
         -webkit-filter: blur(4px);
         filter: blur(4px);
     }
+
+    .btn {
+        border-radius: 0 !important;
+    }
 }
 
 .bb-dialog-wrapper {

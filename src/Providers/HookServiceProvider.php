@@ -85,17 +85,20 @@ class HookServiceProvider extends ServiceProvider
         return null;
     }
 
+    /**
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function loadAssets()
     {
         Theme::asset()
             ->container('footer')
             ->usePath(false)
-            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '3.2');
+            ->add('bb-comment', 'vendor/core/plugins/comment/js/comment.js', ['jquery'], [], '3.4');
 
         Theme::asset()
             ->usePath(false)
             ->add('font-awesome-5', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
-            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css');
+            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css', [], [], '3.4');
 
         if (setting('enable_captcha') && is_plugin_active('captcha')) {
             Theme::asset()
