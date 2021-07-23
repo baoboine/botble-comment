@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <div class="bb-comment-item-actions" v-if="data.userData && comment.user_id === data.userData.id">
+        <div class="bb-comment-item-actions" v-if="data.userData && parseInt(comment.user_id) === parseInt(data.userData.id)">
             <a href="javascript:" @click="showEdit = true">
                 <i class="fas fa-edit"></i>
             </a>
