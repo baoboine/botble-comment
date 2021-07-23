@@ -4,6 +4,9 @@
     @import "~bootstrap/scss/variables";
     @import '~bootstrap/scss/buttons';
     @import "~bootstrap/scss/utilities";
+    @import "~bootstrap/scss/input-group";
+    @import "~bootstrap/scss/forms";
+
     position: fixed;
     z-index: 9998;
     top: 0;
@@ -61,6 +64,11 @@
 
         .bb-dialog-body {
             margin: 20px 0;
+
+            h6 {
+                font-size: 20px;
+                margin: 0;
+            }
 
             .input-group {
                 .form-control {
