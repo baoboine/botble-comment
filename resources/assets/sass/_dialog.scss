@@ -1,4 +1,8 @@
 .bb-dialog-mask {
+    @import "~bootstrap/scss/mixins";
+    @import "~bootstrap/scss/functions";
+    @import "~bootstrap/scss/variables";
+    @import '~bootstrap/scss/_buttons.scss';
     position: fixed;
     z-index: 9998;
     top: 0;
