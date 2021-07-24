@@ -16,7 +16,9 @@ class UpdateVersionService {
     }
 
     check() {
-        this.$buttonCheck.addClass('button-loading');
+        this.$buttonCheck
+            .prop('disabled', true)
+            .addClass('button-loading');
 
         if (!this.$buttonCheck.hasClass('has-new-version')) {
             this.callApi(this.checkLatestApi).then(res => {
@@ -32,6 +34,7 @@ class UpdateVersionService {
 
                     this.$buttonCheck.attr('class', 'btn btn-primary')
                         .addClass('has-new-version')
+                        .prop('disabled', false)
                         .html('<i class="fas fa-download"></i> Install Update');
                 } else {
                     this.$buttonCheck.before(`
@@ -51,7 +54,9 @@ class UpdateVersionService {
 
             this.callApi(this.downloadApi, {}, 'POST').then(res => {
                 console.log('res', res)
-                this.$buttonCheck.removeClass('button-loading');
+                this.$buttonCheck
+                    .prop('disabled', false)
+                    .removeClass('button-loading');
                 if (!res.error && res.data.ok) {
                     $alert.replaceWith(`
                         <div class="alert alert-success">
@@ -61,7 +66,7 @@ class UpdateVersionService {
                 } else {
                     $alert.replaceWith(`
                         <div class="alert alert-danger">
-                            There are somethings wrong. Please try again
+                            ${res.message ?? 'There are somethings wrong. Please try again'}
                         </div>
                     `).slideDown()
                 }
@@ -80,7 +85,7 @@ class UpdateVersionService {
                     resolve(res);
                 },
                 error(res) {
-                    resolve({error: true});
+                    resolve({error: true, message: res?.responseJSON?.message});
                 }
             })
         })

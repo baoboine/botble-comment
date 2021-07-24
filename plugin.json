@@ -4,6 +4,6 @@
     "provider": "Botble\\Comment\\Providers\\CommentServiceProvider",
     "author": "Bao Boi",
     "url": "N/A",
-    "version": "3.3",
+    "version": "3.6.2",
     "description": "Ajax Comments"
 }
