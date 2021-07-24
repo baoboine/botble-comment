@@ -4,6 +4,7 @@ namespace Botble\Comment\Supports;
 
 use Artisan;
 use Botble\Comment\Supports\Traits\SiteApi;
+use Botble\PluginManagement\Services\PluginService;
 use File;
 use Http;
 use Arr;
@@ -132,10 +133,9 @@ class Updater
 
     public static function updateAssets()
     {
-        Artisan::call('vendor:publish', [
-            '--force' => true,
-            '--tag' => 'cms-public'
-        ]);
+        app(PluginService::class)->publishAssets('comment');
+
+        Artisan::call('migrate --force');
 
         return true;
     }
