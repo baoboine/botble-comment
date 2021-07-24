@@ -3,7 +3,7 @@
     "namespace": "Botble\\Comment\\",
     "provider": "Botble\\Comment\\Providers\\CommentServiceProvider",
     "author": "Bao Boi",
-    "url": "N/A",
-    "version": "3.6.2",
+    "url": "https://github.com/baoboine/botble-comment",
+    "version": "3.6.4",
     "description": "Ajax Comments"
 }
