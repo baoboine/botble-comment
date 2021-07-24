@@ -28,7 +28,7 @@ class Updater
         $data = json_decode($data);
 
         return [
-            'has'       => !!version_compare($data->data->version, comment_plugin_version(), '>='),
+            'has'       => !!version_compare($data->data->version, comment_plugin_version(), '>'),
             'version'   => $data->data->version,
         ];
     }
