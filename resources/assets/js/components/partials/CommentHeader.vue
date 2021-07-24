@@ -23,7 +23,7 @@
             </button>
 
             <dropdown
-                :selected="{name: __('Newest')}"
+                :selectedValue="data.sort"
                 v-on:updateOption="onChangeSort"
                 :options="[
                     {name: __('Newest'), value: 'newest'},

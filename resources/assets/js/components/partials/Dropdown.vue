@@ -37,6 +37,7 @@ export default {
             type: [Array, Object]
         },
         selected: {},
+        selectedValue: {},
         placeholder: [String],
         closeOnOutsideClick: {
             type: [Boolean],
@@ -52,7 +53,11 @@ export default {
         }
     },
     mounted() {
-        this.selectedOption = this.selected;
+        if (this.selectedValue) {
+            this.selectedOption = this.options.find(item => item.value === this.selectedValue);
+        } else {
+            this.selectedOption = this.selected;
+        }
         if (this.placeholder)
         {
             this.placeholderText = this.placeholder;
@@ -63,7 +68,11 @@ export default {
     },
     watch: {
         selected() {
-            this.selectedOption = this.selected;
+            if (this.selectedValue) {
+                this.selectedOption = this.options.find(item => item.value === this.selectedValue);
+            } else {
+                this.selectedOption = this.selected;
+            }
         }
     },
     beforeDestroy() {
