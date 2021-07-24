@@ -9,7 +9,7 @@
                 </div>
                 <div class="col">
                     <h5 class="mb-2">{{ user.name }}</h5>
-                    <p>Join date: {{ this.parseDate() }}</p>
+                    <p>{{ __('Join date') }}: {{ this.parseDate() }}</p>
                 </div>
             </div>
         </div>
