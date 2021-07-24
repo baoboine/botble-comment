@@ -72,6 +72,52 @@
 
             </div>
 
+            <div class="flexbox-annotated-section">
+
+                <div class="flexbox-annotated-section-annotation">
+                    <div class="annotated-section-title pd-all-20">
+                        <h2>Update Version</h2>
+                    </div>
+                    <div class="annotated-section-description pd-all-20 p-none-t">
+                        <p class="color-note">Make sure your Plugin is always up to date</p>
+                    </div>
+                </div>
+
+                <div class="flexbox-annotated-section-content">
+                    <div class="wrapper-content pd-all-20">
+                        <div id="comment-plugin-updater"
+                             data-apis='@json([
+                                'check' => route('comment.updater-check'),
+                                'download' => route('comment.updater-download')
+                            ])'
+                        >
+
+                            <div class="form-group">
+                                <label class="text-sm not-italic font-weight-bold input-label d-block">Current Version</label>
+                                <p>You can easily update Plugin by checking for a new update by clicking the button below</p>
+                                <label class="box-border flex w-16 p-3 my-2 text-sm text-gray-500 bg-gray-200 border border-gray-200 border-solid rounded-md" id="version">
+                                    {{ comment_plugin_version() }}
+                                </label>
+
+                                <hr />
+
+                                @if (!$can_update)
+                                    <div class="alert alert-danger">
+                                        Cannot write files! Folder /platform/plugins/comment is not writable. Please chmod to make it writable!
+                                    </div>
+                                @else
+                                    <button class="btn btn-outline-primary" type="button" id="check-version">Check for Updates</button>
+                                @endif
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
         <div class="flexbox-annotated-section" style="border: none">

@@ -18,6 +18,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Comment\Forms\CommentForm;
 use Botble\Base\Forms\FormBuilder;
 use Assets;
+use File;
 
 class CommentController extends BaseController
 {
@@ -170,7 +171,9 @@ class CommentController extends BaseController
 
         Assets::addScriptsDirectly('vendor/core/plugins/comment/js/comment-setting.js');
 
-        return view('plugins/comment::settings');
+        return view('plugins/comment::settings', [
+            'can_update'    => File::isWritable(plugin_path('comment'))
+        ]);
     }
 
     /**

@@ -98,7 +98,7 @@ class HookServiceProvider extends ServiceProvider
         Theme::asset()
             ->usePath(false)
             ->add('font-awesome-5', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css')
-            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css', [], [], '3.4.2');
+            ->add('bb-comment-css', 'vendor/core/plugins/comment/css/comment.css', [], [], '3.4');
 
         if (setting('enable_captcha') && is_plugin_active('captcha')) {
             Theme::asset()

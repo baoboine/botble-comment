@@ -76,8 +76,8 @@ export default {
         }
     },
     components: {
-        avatar: Avatar,
-        'comment-box': CommentBox,
+        Avatar,
+        CommentBox,
     },
     props: {
         comment: {
@@ -93,7 +93,7 @@ export default {
     mounted() {
         const rep = this.comment.rep;
         if (rep && rep.data) {
-            this.comments = rep.data;
+            this.comments = rep.data.reverse();
             this.attrs = {
                 total: rep.total,
                 last_page: rep.last_page,
@@ -107,7 +107,6 @@ export default {
             this.showReply = true;
         },
         onPostCommentSuccess(comment, isSending = false, fillIndex = null) {
-            this.showReply = false;
             if (fillIndex === null) {
                 comment.replies = [];
                 comment.user = this.data.userData;
@@ -117,10 +116,12 @@ export default {
                 return this.comments.unshift(comment);
             } else {
                 if (fillIndex !== -1) {
+                    this.showReply = false;
                     comment.isSending = false;
                     this.comments[0] = Object.assign(this.comments[0], comment);
                 } else {
                     // failed
+                    this.showReply = true;
                     this.comments.splice(0, 1);
                 }
             }
@@ -163,7 +164,7 @@ export default {
                 page: this.attrs.current_page + 1,
                 limit: this.attrs.per_page,
             }, data => {
-                this.comments = data.data.comments.concat(this.comments);
+                this.comments = data.data.comments.reverse().concat(this.comments);
                 this.attrs = data.data.attrs;
             })
         },

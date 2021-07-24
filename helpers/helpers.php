@@ -31,3 +31,12 @@ if (!function_exists('has_passport')) {
         return class_exists('Laravel\Passport\Passport');
     }
 }
+
+if (!function_exists('comment_plugin_version')) {
+    function comment_plugin_version()
+    {
+        $content = get_file_data(plugin_path('comment/plugin.json'));
+
+        return \Arr::get($content, 'version');
+    }
+}

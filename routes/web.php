@@ -26,6 +26,20 @@ Route::group(['namespace' => 'Botble\Comment\Http\Controllers', 'middleware' => 
                 'uses'       => 'CommentController@storeSettings',
                 'permission' => 'setting.options',
             ]);
+
+            // Updater
+
+            Route::get('update/check', [
+                'as'    => 'updater-check',
+                'uses'  => 'UpdateController@checkVersion',
+                'permission' => 'setting.options',
+            ]);
+
+            Route::post('update/download', [
+                'as'    => 'updater-download',
+                'uses'  => 'UpdateController@download',
+                'permission' => 'setting.options',
+            ]);
         });
 
         Route::get('comment/settings', 'CommentController@getSettings')->name('comment.setting');
