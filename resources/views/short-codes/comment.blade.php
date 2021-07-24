@@ -1,5 +1,6 @@
 <div class="bb-comment-wrapper" id="bb-comment">
     <comment
+        copyright="{{ setting('plugin_comment_copyright', 'Proudly Powered by Bao Boi') }}"
         reference="{{ $reference }}"
         url="{{ route('comment.list') }}"
         post-url="{{ route('comment.post') }}"

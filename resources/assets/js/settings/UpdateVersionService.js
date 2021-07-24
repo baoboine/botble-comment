@@ -52,7 +52,7 @@ class UpdateVersionService {
     }
 
     installUpdate($alert) {
-        let message = 'Download ZIP file';
+        let message = this.$el.data('msg');
         let files = [];
         const loop = () => {
             let $text = $(`<p class="text-primary"><span>${message}</span></p>`)
@@ -60,7 +60,7 @@ class UpdateVersionService {
 
             this.callApi(this.downloadApi, {files}, 'POST').then(res => {
                 if (!res.error) {
-                    $text.attr('class', 'text-success').prepend('<i class="fas fa-check-circle"></i>');
+                    $text.attr('class', 'text-success').prepend('<i class="fas fa-check-circle mr-2"></i> ');
 
                     if (!res.data?.ok) {
                         message = res.message;

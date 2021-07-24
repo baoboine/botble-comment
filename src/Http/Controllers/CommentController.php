@@ -7,6 +7,7 @@ use Botble\Comment\Http\Requests\CommentRequest;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Comment\Supports\CloneUserToCommentUser;
+use Botble\Comment\Supports\Updater;
 use Botble\Setting\Supports\SettingStore;
 use Illuminate\Http\Request;
 use Exception;
@@ -183,8 +184,16 @@ class CommentController extends BaseController
             $canUpdate[] = trans('packages/plugin-management::plugin.folder_is_not_writeable', ['name' => $pluginPath]);
         }
 
+        if (!extension_loaded('curl')) {
+            $canUpdate[] = 'cURL extension is not active';
+        }
+
+        $updateProgress = json_decode(setting('comment_plugin_update_progress', '{"step": 1}'));
+
         return view('plugins/comment::settings', [
-            'can_update'    => $canUpdate
+            'can_update'        => $canUpdate,
+            'update_step'       => (int)$updateProgress->step > 1,
+            'update_step_msg'   => Updater::$stepMessage[$updateProgress->step]
         ]);
     }
 

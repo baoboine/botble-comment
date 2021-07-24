@@ -44,38 +44,28 @@ class UpdateController extends BaseController
     {
         [$step, $data] = $this->getCurrentStep();
 
-        $message = '';
         $file = null;
 
         if ($step === 1) {
             $file = Updater::download(false);
             $this->saveCurrentStep($settingStore, $file);
-
-            $message = 'Unzipping Package';
-
         } else if ($step === 2) {
             $file = Updater::unzip($data);
             $this->saveCurrentStep($settingStore, $file);
-
-            $message = 'Copying Files';
-
         } else if ($step === 3) {
             $ok = Updater::copyFiles($data);
             $this->saveCurrentStep($settingStore, $ok);
-
-            $message = 'Running Migrations and Publish assets';
-
         } else if ($step === 4) {
             Updater::updateAssets();
-
             $this->saveCurrentStep($settingStore, 1);
-            $message = 'Deleting Unused files';
         } else if ($step === 5) {
             Updater::deleteFiles($request->input('files'));
             $this->resetSettingStep($settingStore);
 
             return $this->response->setData(['ok' => true]);
         }
+
+        $message = Updater::$stepMessage[$step + 1];
 
         return $this->response->setMessage($message)->setData(compact('file'));
     }

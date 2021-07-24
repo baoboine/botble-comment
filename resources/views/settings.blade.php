@@ -76,6 +76,68 @@
 
                 <div class="flexbox-annotated-section-annotation">
                     <div class="annotated-section-title pd-all-20">
+                        <h2>Appearance</h2>
+                    </div>
+                </div>
+
+                <div class="flexbox-annotated-section-content">
+                    <div class="wrapper-content pd-all-20">
+                        <div class="form-group">
+                            <input type="hidden" name="plugin_comment_rating" value="0">
+                            <input class="form-check-input" type="checkbox" name="plugin_comment_rating"
+                                   @if (setting('plugin_comment_rating')) checked @endif
+                                   disabled
+                                   value="1" id="plugin_comment_rating"
+                            >
+
+                            <label class="form-check-label" for="enable">
+                                Enable Rating
+                            </label>
+
+                            {{ Form::helper('Coming soon') }}
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="plugin_comment_rating" value="0">
+                            <input class="form-check-input" type="checkbox" name="plugin_comment_reactions"
+                                   @if (setting('plugin_comment_reactions')) checked @endif
+                                   disabled
+                                   value="1" id="plugin_comment_reactions"
+                            >
+                            <label class="form-check-label" for="enable">
+                                Enable Reactions
+                            </label>
+
+                            {{ Form::helper('Coming soon') }}
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="plugin_comment_rating" value="0">
+                            <input class="form-check-input" type="checkbox" name="plugin_comment_profiles"
+                                   @if (setting('plugin_comment_profiles')) checked @endif
+                                    disabled
+                                   value="1" id="plugin_comment_profiles"
+                            >
+                            <label class="form-check-label" for="enable">
+                                Enable member profile
+                            </label>
+
+                            {{ Form::helper('Coming soon') }}
+                        </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">Copyright</label>
+                            <input type="text" class="form-control" name="plugin_comment_copyright" value="{{ setting('plugin_comment_copyright', 'Proudly Powered by Bao Boi') }}" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flexbox-annotated-section">
+
+                <div class="flexbox-annotated-section-annotation">
+                    <div class="annotated-section-title pd-all-20">
                         <h2>Update Version</h2>
                     </div>
                     <div class="annotated-section-description pd-all-20 p-none-t">
@@ -86,6 +148,7 @@
                 <div class="flexbox-annotated-section-content">
                     <div class="wrapper-content pd-all-20">
                         <div id="comment-plugin-updater"
+                             data-msg="{{ $update_step_msg }}"
                              data-apis='@json([
                                 'check' => route('comment.updater-check'),
                                 'download' => route('comment.updater-download')
@@ -108,10 +171,15 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    <button class="btn btn-outline-primary" type="button" id="check-version">Check for Updates</button>
+                                    @if(!$update_step)
+                                        <button class="btn btn-outline-primary" type="button" id="check-version"><i class="fas fa-sync-alt"></i> Check for Updates</button>
+                                    @else
+                                        <div class="alert alert-info" style="padding:.75rem 12px">
+                                            <i class="fas fa-arrow-alt-circle-right"></i> {{ $update_step_msg }}
+                                        </div>
+                                        <button class="btn btn-warning has-new-version" type="button" id="check-version"><i class="fas fa-arrow-alt-circle-right"></i> Continue update</button>
+                                    @endif
                                 @endif
-
-
                             </div>
 
                         </div>

@@ -1,13 +1,18 @@
 <!-- Please don't remove this file, If you respect what I did -->
 <template>
     <div class="bb-comment-footer">
-        <h6><a href="https://github.com/baoboine/botble-comment" target="_blank">Proudly Powered by Bao Boi</a> </h6>
+        <h6><a href="https://github.com/baoboine/botble-comment" target="_blank">{{ text }}</a> </h6>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'CommentFooter'
+    name: 'CommentFooter',
+    props: {
+        text: {
+            type: String
+        }
+    }
 }
 </script>
 

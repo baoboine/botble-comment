@@ -15,6 +15,14 @@ class Updater
 {
     use SiteApi;
 
+    public static $stepMessage = [
+        '1' => 'Download ZIP file',
+        '2' => 'Unzipping Package',
+        '3' => 'Copying Files',
+        '4' => 'Deleting Unused files',
+        '5' => 'Running Migrations and publish Assets'
+    ];
+
     public static function checkForUpdate()
     {
         $data = null;
@@ -122,9 +130,12 @@ class Updater
 
     public static function deleteFiles($files)
     {
-        foreach ($files as $file) {
-            \File::delete(base_path($file));
+        if ($files && is_array($files)) {
+            foreach ($files as $file) {
+                \File::delete(base_path($file));
+            }
         }
+
 
         return true;
     }
@@ -132,8 +143,7 @@ class Updater
     public static function updateAssets()
     {
         app(PluginService::class)->publishAssets('comment');
-
-        Artisan::call('migrate --force');
+        app('migrator')->run(plugin_path('comment/database/migrations'));
 
         return true;
     }

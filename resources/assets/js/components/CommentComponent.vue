@@ -28,7 +28,7 @@
             <div class="bb-loading mini"></div>
         </div>
 
-        <comment-footer />
+        <comment-footer v-if="copyright" :text="copyright" />
     </div>
 </template>
 
@@ -126,6 +126,9 @@ export default {
         captcha: {
             type: String,
             default: ''
+        },
+        copyright: {
+            type: String,
         }
     },
     methods: {
