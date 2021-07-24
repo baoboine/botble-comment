@@ -101,10 +101,12 @@
 
                                 <hr />
 
-                                @if (!$can_update)
-                                    <div class="alert alert-danger">
-                                        Cannot write files! Folder /platform/plugins/comment is not writable. Please chmod to make it writable!
-                                    </div>
+                                @if (!empty($can_update))
+                                    @foreach ($can_update as $message)
+                                        <div class="alert alert-danger">
+                                            {{ $message }}
+                                        </div>
+                                    @endforeach
                                 @else
                                     <button class="btn btn-outline-primary" type="button" id="check-version">Check for Updates</button>
                                 @endif

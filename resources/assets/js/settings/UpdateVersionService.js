@@ -47,22 +47,40 @@ class UpdateVersionService {
             })
         } else {
             let $alert = this.$buttonCheck.prev('.alert');
+            this.installUpdate($alert);
+        }
+    }
 
-            if ($alert.length) {
-                $alert.slideUp(500)
-            }
+    installUpdate($alert) {
+        let message = 'Download ZIP file';
+        let files = [];
+        const loop = () => {
+            let $text = $(`<p class="text-primary"><span>${message}</span></p>`)
+            this.$el.append($text);
 
-            this.callApi(this.downloadApi, {}, 'POST').then(res => {
-                console.log('res', res)
-                this.$buttonCheck
-                    .prop('disabled', false)
-                    .removeClass('button-loading');
-                if (!res.error && res.data.ok) {
-                    $alert.replaceWith(`
-                        <div class="alert alert-success">
-                            Update plugin successfully! Press <a onclick="window.location.reload()"><strong>Reload</strong></a> to finish
-                        </div>
-                    `).slideDown()
+            this.callApi(this.downloadApi, {files}, 'POST').then(res => {
+                if (!res.error) {
+                    $text.attr('class', 'text-success').prepend('<i class="fas fa-check-circle"></i>');
+
+                    if (!res.data?.ok) {
+                        message = res.message;
+                        if (res.data?.file) {
+                            files.push(res.data?.file);
+                        }
+                        loop();
+                    } else {
+                        this.$buttonCheck
+                            .prop('disabled', false)
+                            .removeClass('button-loading')
+                            .attr('class', 'btn btn-warning')
+                            .html('<i class="fas fa-sync-alt"></i> Reload')
+                            .off('click').on('click', () => window.location.reload())
+                        $alert.replaceWith(`
+                            <div class="alert alert-success">
+                                Update plugin successfully! Press <a onclick="window.location.reload()"><strong>Reload</strong></a> to finish
+                            </div>
+                        `).slideDown()
+                    }
                 } else {
                     $alert.replaceWith(`
                         <div class="alert alert-danger">
@@ -70,8 +88,11 @@ class UpdateVersionService {
                         </div>
                     `).slideDown()
                 }
-            });
+            })
         }
+
+        $alert.attr('class', 'alert alert-warning').text('It will just take a few minutes. Please do not refresh the screen or close the window before the update finishes')
+        loop();
     }
 
 

@@ -171,8 +171,20 @@ class CommentController extends BaseController
 
         Assets::addScriptsDirectly('vendor/core/plugins/comment/js/comment-setting.js');
 
+        $pluginPath = plugin_path('comment');
+        $pluginPublicPath = public_path('vendor/core/plugins');
+        $canUpdate = [];
+
+        if (!File::isWritable($pluginPublicPath)) {
+            $canUpdate[] = trans('packages/plugin-management::plugin.folder_is_not_writeable', ['name' => $pluginPublicPath]);
+        }
+
+        if (!File::isWritable($pluginPath)) {
+            $canUpdate[] = trans('packages/plugin-management::plugin.folder_is_not_writeable', ['name' => $pluginPath]);
+        }
+
         return view('plugins/comment::settings', [
-            'can_update'    => File::isWritable(plugin_path('comment'))
+            'can_update'    => $canUpdate
         ]);
     }
 
