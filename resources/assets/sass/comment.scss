@@ -150,7 +150,33 @@ $primaryColor: var(--color-1st, #0088cc);
             $item: &;
             margin-bottom: 1rem;
             position: relative;
-            overflow: hidden;
+            //overflow: hidden;
+
+            &-user_name {
+                display: inline-block;
+                position: relative;
+
+                a {
+                    text-decoration: none !important;
+                }
+
+                &-info {
+                    position: absolute;
+                    width: 400px;
+                    min-height: 120px;
+                    box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+                    background-color: #FFF;
+                    padding: 10px;
+                    top: -120px;
+                    left: -100px;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 60px;
+                    }
+                }
+            }
 
             &.is-sending {
                 opacity: 0.5;
@@ -165,13 +191,15 @@ $primaryColor: var(--color-1st, #0088cc);
                 position: absolute;
                 top: 0;
                 right: 0;
+                opacity: 0;
                 transform: translateX(100px);
-                transition: all 0.3s;
+                transition: all 0.3s ease;
             }
 
             &:hover {
                 & > [class*="actions"] {
                     transform: translateX(-20px);
+                    opacity: 1;
                 }
 
                 &:after {

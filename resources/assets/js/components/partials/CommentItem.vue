@@ -5,7 +5,7 @@
 
             <div class="bb-comment-content w-100">
                 <div class="bb-comment-content-user">
-                    <strong>{{ comment.user ? comment.user.name || `${comment.user.first_name} ${comment.user.last_name}` : 'Guest' }}</strong>
+                    <user-name :user="comment.user"></user-name>
                     <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
                     <span class="px-2">•</span>
                     <span class="time">{{ !comment.isSending ? comment.time : 'sending...' }}</span>
@@ -63,6 +63,7 @@
 <script>
 import Avatar from "./Avatar";
 import CommentBox from "./CommentBox";
+import UserName from "./UserName";
 import Http from '../../service/http';
 
 export default {
@@ -78,6 +79,7 @@ export default {
     components: {
         Avatar,
         CommentBox,
+        UserName,
     },
     props: {
         comment: {
