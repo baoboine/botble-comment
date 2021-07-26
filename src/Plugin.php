@@ -15,5 +15,6 @@ class Plugin extends PluginOperationAbstract
         Schema::dropIfExists('bb_comment_users');
         Schema::dropIfExists('bb_comment_likes');
         Schema::dropIfExists('bb_comment_recommends');
+        Schema::dropIfExists('bb_comment_ratings');
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="bb-comment">
-        <comment-header :recommend="recommend" />
-        <comment-box :on-success="onPostCommentSuccess" />
+        <comment-header :recommend="recommend" :has-rating="hasRating" />
+        <comment-box :on-success="onPostCommentSuccess" :has-rating="hasRating" />
         <div class="bb-loading" v-if="isLoading"></div>
         <div class="bb-comment-list" v-if="!isLoading">
             <comment-item v-for="(comment, index) in comments" :key="comment.id" :comment="comment" :on-delete-item="() => onDeletedItem(index)" />
@@ -56,6 +56,7 @@ export default {
                 userData: null,
                 attrs: null,
                 sort: 'newest',
+                rating: {},
             },
             confirmDialogData: null,
             showLoginForm: false,
@@ -131,6 +132,11 @@ export default {
             type: String,
         }
     },
+    computed: {
+        hasRating() {
+            return this.reactive.rating;
+        }
+    },
     methods: {
         async getCurrentUserData() {
             if (Ls.get('auth.token')) {
@@ -172,6 +178,7 @@ export default {
                 this.comments = data.data.comments;
                 this.reactive.userData = data.data.user;
                 this.reactive.attrs = data.data.attrs;
+                this.reactive.rating = data.data.rating;
                 this.recommend = data.data.recommend;
             })
         },
@@ -201,6 +208,9 @@ export default {
             } else {
                 if (fillIndex !== -1) {
                     comment.isSending = false;
+
+                    this.reactive.rating = comment.rated;
+
                     this.comments[0] = Object.assign(this.comments[0], comment);
                 } else {
                     // failed
@@ -250,7 +260,7 @@ export default {
                         cb();
                     } else {
                         Ls.set('auth.token', res.data.data.token);
-                        this.getCurrentUserData();
+                        await this.getCurrentUserData();
                     }
                 }
             } catch(e) {

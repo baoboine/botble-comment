@@ -9,6 +9,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
+use Botble\Comment\Repositories\Interfaces\CommentRatingInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Botble\Comment\Events\NewCommentEvent;
@@ -47,7 +48,7 @@ class CommentFrontController extends BaseController
      * @param Request $request
      * @return BaseHttpResponse
      */
-    public function postComment(Request $request): BaseHttpResponse
+    public function postComment(Request $request, CommentRatingInterface $commentRatingRepo): BaseHttpResponse
     {
         $validate = $this->validator($request->input());
         if ($validate->fails()) {
@@ -78,15 +79,21 @@ class CommentFrontController extends BaseController
             'reference_type',
             'reference',
             'comment',
-            'parent_id'
+            'parent_id',
+            'rating',
         ]));
+
+        if (setting('plugin_comment_rating', true) && $comment) {
+            $comment->rating = $commentRatingRepo->storageRating($reference, $user, $request->input('rating', 0));
+            $comment->rated = $commentRatingRepo->getRatingOfArticle($reference, $user);
+        }
 
         event(new NewCommentEvent($comment, $user));
 
         return $this->response->setData($comment);
     }
 
-    public function getComments(Request $request, CommentRecommendInterface $commentRecommendRepo)
+    public function getComments(Request $request, CommentRecommendInterface $commentRecommendRepo, CommentRatingInterface $commentRatingRepo)
     {
         if (!($reference = $this->reference($request))) {
             return $this->response
@@ -101,13 +108,19 @@ class CommentFrontController extends BaseController
 
         [$comments, $attrs] = $this->commentRepository->getComments($reference, $parentId, $page, $limit, $sort);
 
+        $response = [
+            'comments'      => $comments,
+            'attrs'         => $attrs,
+            'user'          => $user,
+            'recommend'     => $commentRecommendRepo->getRecommendOfArticle($reference, $user),
+        ];
+
+        if (setting('plugin_comment_rating', true)) {
+            $response['rating'] = $commentRatingRepo->getRatingOfArticle($reference, $user);
+        }
+
         return $this->response
-            ->setData([
-                'comments'      => $comments,
-                'attrs'         => $attrs,
-                'user'          => $user,
-                'recommend'     => $commentRecommendRepo->getRecommendOfArticle($reference, $user),
-            ]);
+            ->setData($response);
 
     }
 

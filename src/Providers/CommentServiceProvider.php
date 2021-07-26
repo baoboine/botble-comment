@@ -4,15 +4,19 @@ namespace Botble\Comment\Providers;
 
 use Botble\Comment\Models\Comment;
 use Botble\Comment\Models\CommentLike;
+use Botble\Comment\Models\CommentRating;
 use Botble\Comment\Models\CommentRecommend;
 use Botble\Comment\Models\CommentUser;
 use Botble\Comment\Repositories\Caches\CommentLikeCacheDecorator;
+use Botble\Comment\Repositories\Caches\CommentRatingCacheDecorator;
 use Botble\Comment\Repositories\Caches\CommentRecommendCacheDecorator;
 use Botble\Comment\Repositories\Caches\CommentUserCacheDecorator;
 use Botble\Comment\Repositories\Eloquent\CommentLikeRepository;
+use Botble\Comment\Repositories\Eloquent\CommentRatingRepository;
 use Botble\Comment\Repositories\Eloquent\CommentRecommendRepository;
 use Botble\Comment\Repositories\Eloquent\CommentUserRepository;
 use Botble\Comment\Repositories\Interfaces\CommentLikeInterface;
+use Botble\Comment\Repositories\Interfaces\CommentRatingInterface;
 use Botble\Comment\Repositories\Interfaces\CommentRecommendInterface;
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
 use Illuminate\Support\ServiceProvider;
@@ -51,6 +55,10 @@ class CommentServiceProvider extends ServiceProvider
 
         $this->app->bind(CommentRecommendInterface::class, function() {
             return new CommentRecommendCacheDecorator(new CommentRecommendRepository(new CommentRecommend));
+        });
+
+        $this->app->bind(CommentRatingInterface::class, function() {
+            return new CommentRatingCacheDecorator(new CommentRatingRepository(new CommentRating));
         });
 
         config([

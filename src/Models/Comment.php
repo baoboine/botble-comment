@@ -65,7 +65,7 @@ class Comment extends BaseModel
      */
     public function user()
     {
-        return $this->hasOne(CommentUser::class, 'id', 'user_id');
+        return $this->hasOne(CommentUser::class, 'id', 'user_id')->withDefault();
     }
 
     /**
@@ -104,7 +104,7 @@ class Comment extends BaseModel
     {
         return (int)$this->reply_count > 0 ? $this->replies()
             ->orderBy('created_at', 'DESC')
-            ->paginate(2) : [];
+            ->paginate(2, ['*'], 'rep_page') : [];
     }
 
     public function getLikedAttribute()

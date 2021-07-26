@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class CloneUserToCommentUser
 {
+    /**
+     * @var CommentUserInterface
+     */
     protected $commentUser;
 
     /**
@@ -25,13 +28,18 @@ class CloneUserToCommentUser
     public function handle(Request $request)
     {
         if ($user = $request->user() ?: (config('auth.guards.member') && auth()->guard('member')->user())) {
-            return $this->commentUser->createOrUpdate([
-                'email'     => $user->email,
-                'password'  => $user->password,
-                'avatar_id' => $user->avatar_id,
-                'user_type' => get_class($user),
-                'name'      => join(' ', [$user->first_name, $user->last_name]),
-            ], ['email' => $user->email]);
+            $user = $this->commentUser->getFirstBy(['email' => $user->email]);
+            if (!$user) {
+                return $this->commentUser->createOrUpdate([
+                    'email'     => $user->email,
+                    'password'  => $user->password,
+                    'avatar_id' => $user->avatar_id,
+                    'user_type' => get_class($user),
+                    'name'      => join(' ', [$user->first_name, $user->last_name]),
+                ]);
+            }
+
+            return $user;
         }
 
         return false;

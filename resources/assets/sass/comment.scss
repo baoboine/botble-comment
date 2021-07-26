@@ -69,8 +69,13 @@ $primaryColor: var(--color-1st, #0088cc);
         &-box {
             margin-bottom: 1rem;
 
+            &.has-rating {
+                margin-top: 30px;
+            }
+
             .#{$prefix}textarea {
                 flex: 1;
+                position: relative;
 
                 textarea {
                     min-height: 48px;
@@ -144,6 +149,11 @@ $primaryColor: var(--color-1st, #0088cc);
                     color: #ccc;
                 }
             }
+        }
+
+        &-rating {
+            position: absolute;
+            top: -35px;
         }
 
         &-item {

@@ -85,20 +85,17 @@
                         <div class="form-group">
                             <input type="hidden" name="plugin_comment_rating" value="0">
                             <input class="form-check-input" type="checkbox" name="plugin_comment_rating"
-                                   @if (setting('plugin_comment_rating')) checked @endif
-                                   disabled
+                                   @if (setting('plugin_comment_rating', true)) checked @endif
                                    value="1" id="plugin_comment_rating"
                             >
 
                             <label class="form-check-label" for="enable">
                                 Enable Rating
                             </label>
-
-                            {{ Form::helper('Coming soon') }}
                         </div>
 
                         <div class="form-group">
-                            <input type="hidden" name="plugin_comment_rating" value="0">
+                            <input type="hidden" name="plugin_comment_reactions" value="0">
                             <input class="form-check-input" type="checkbox" name="plugin_comment_reactions"
                                    @if (setting('plugin_comment_reactions')) checked @endif
                                    disabled
@@ -112,7 +109,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="hidden" name="plugin_comment_rating" value="0">
+                            <input type="hidden" name="plugin_comment_profiles" value="0">
                             <input class="form-check-input" type="checkbox" name="plugin_comment_profiles"
                                    @if (setting('plugin_comment_profiles')) checked @endif
                                     disabled

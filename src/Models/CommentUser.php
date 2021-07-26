@@ -49,6 +49,11 @@ class CommentUser extends Authenticatable
         return $this->belongsTo(MediaFile::class)->withDefault();
     }
 
+    public function rating()
+    {
+        return $this->hasOne(CommentRating::class, 'user_id')->withDefault();
+    }
+
     /**
      * @return \Illuminate\Contracts\Routing\UrlGenerator|string
      */

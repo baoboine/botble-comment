@@ -1,9 +1,15 @@
 <template>
     <div class="bb-comment-header" v-if="data.attrs">
+
+        <div class="bb-comment-header-ratings text-center" v-if="hasRating">
+            <span>{{ data.rating.count }} {{ __('Ratings') }}</span>
+            <div class="d-block text-center">
+                <star-rating :rating="data.rating.rating" :star-size="30" :animate="false" :read-only="true" style="display: inline-block" />
+            </div>
+        </div>
+
         <div class="bb-comment-header-top d-flex justify-content-between">
             <strong>{{ data.attrs.count_all }} {{ __('Comments') }}</strong>
-
-
             <dropdown
                 @click="() => !isLogged && openLoginForm()"
                 icon="fas fa-comment"
@@ -31,18 +37,6 @@
                     {name: __('Oldest'), value: 'oldest'}
                 ]"
             />
-
-<!--            <div class="btn-group">-->
-<!--                <button type="button" class="btn btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                    {{ __('Sort By') }} {{ data.sort }}-->
-<!--                    <i class="fas fa-sort-down"></i>-->
-<!--                </button>-->
-<!--                <div class="dropdown-menu">-->
-<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'newest' && 'active'" href="javascript:" @click="() => onChangeSort('newest')">{{ __('Newest') }}</a>-->
-<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'best' && 'active'" href="javascript:" @click="() => onChangeSort('best')">{{ __('Best') }}</a>-->
-<!--                    <a class="dropdown-item" v-bind:class="data.sort === 'oldest' && 'active'" href="javascript:" @click="() => onChangeSort('oldest')">{{ __('Oldest') }}</a>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </div>
 </template>
@@ -51,11 +45,13 @@
 import Http from '../../service/http';
 import Ls from '../../service/Ls';
 import Dropdown from "./Dropdown";
+import StarRating from './StarRating';
 
 export default {
     name: 'Header',
     components: {
-        Dropdown
+        Dropdown,
+        StarRating,
     },
     data: () => {
         return {
@@ -79,6 +75,10 @@ export default {
     props: {
         recommend: {
             type: Object,
+        },
+        hasRating: {
+            type: Boolean,
+            default: false,
         }
     },
     computed: {

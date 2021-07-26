@@ -7,8 +7,17 @@
                 <div class="bb-comment-content-user">
                     <user-name :user="comment.user"></user-name>
                     <span class="badge badge-warning" v-if="comment.isAuthor">{{ __('Author') }}</span>
-                    <span class="px-2">•</span>
+                    <span class="px-1">•</span>
                     <span class="time">{{ !comment.isSending ? comment.time : 'sending...' }}</span>
+                    <span class="px-1" v-if="comment.user.rating && comment.user.rating.rating">•</span>
+                    <div class="d-inline-block" v-if="rated > 0">
+                        <star-rating
+                            :rating="rated"
+                            :read-only="true"
+                            :animate="false"
+                            :star-size="15"
+                        />
+                    </div>
                 </div>
 
                 <div v-show="!showEdit">
@@ -64,6 +73,7 @@
 import Avatar from "./Avatar";
 import CommentBox from "./CommentBox";
 import UserName from "./UserName";
+import StarRating from './StarRating';
 import Http from '../../service/http';
 
 export default {
@@ -80,6 +90,7 @@ export default {
         Avatar,
         CommentBox,
         UserName,
+        StarRating,
     },
     props: {
         comment: {
@@ -102,6 +113,22 @@ export default {
                 current_page: rep.current_page,
                 per_page: rep.per_page,
             }
+        }
+    },
+    computed: {
+        rated() {
+            const rating = this.data.rating,
+                comment = this.comment;
+
+            if (
+                rating &&
+                comment &&
+                rating.data[comment.user.id]
+            ) {
+                return rating.data[comment.user.id]
+            }
+
+            return 0;
         }
     },
     methods: {

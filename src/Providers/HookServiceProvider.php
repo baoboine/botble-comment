@@ -4,7 +4,10 @@
 namespace Botble\Comment\Providers;
 
 use Botble\ACL\Models\User;
+use Botble\Blog\Models\Post;
 use Botble\Comment\Repositories\Interfaces\CommentInterface;
+use Botble\Comment\Repositories\Interfaces\CommentRatingInterface;
+use RvMedia;
 use Botble\Member\Models\Member;
 use Illuminate\Support\ServiceProvider;
 use MacroableModels;
@@ -44,6 +47,8 @@ class HookServiceProvider extends ServiceProvider
         $loggedUser = auth()->user() ? request()->user()->only(['id', 'email']) : ['id' => 0];
 
         add_filter(THEME_FRONT_HEADER, function ($html) {
+            $this->addSchemas($html);
+
             return $html . view('plugins/comment::partials.trans');
         }, 15);
 
@@ -67,19 +72,20 @@ class HookServiceProvider extends ServiceProvider
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    protected function getReference(): ?string
+    protected function getReference($isBase64 = true)
     {
         if ($object = $this->currentReference) {
-            return base64_encode(json_encode([
+            $reference = [
                 'reference_type'    => get_class($object),
                 'reference_id'      => $object->id,
                 'author'            => [
                     'id'    => $this->currentReference->user_id ?: $this->currentReference->author_id,
                     'type'  => $this->currentReference->user_type ?: $this->currentReference->author_type ?: User::class,
                 ]
-            ]));
+            ];
+            return $isBase64 ? base64_encode(json_encode($reference)) : $reference;
         }
 
         return null;
@@ -133,5 +139,40 @@ class HookServiceProvider extends ServiceProvider
         }
 
         return $index;
+    }
+
+    protected function addSchemas(&$html)
+    {
+        $schemaJson = array (
+            '@context' => 'http://schema.org',
+            '@type' => 'NewsArticle',
+        );
+
+        $ratingData = app(CommentRatingInterface::class)->getRatingOfArticle($this->getReference(false), null);
+
+        if ($this->currentReference && get_class($this->currentReference) === Post::class) {
+            $post = $this->currentReference;
+            $category = $post->categories()->first();
+
+            if ($category) {
+                $schemaJson['category'] = $category->name;
+            }
+
+            $schemaJson = array_merge($schemaJson, [
+                'url' => $post->url,
+                'description' => $post->description,
+                'name' => $post->name,
+                'image' => RvMedia::getImageUrl($post->image),
+                'aggregateRating' =>
+                    array (
+                        '@type' => 'AggregateRating',
+                        'ratingValue' => $ratingData['rating'],
+                        'reviewCount' => $ratingData['count'],
+                    ),
+            ]);
+
+            $html .= '<script type="application/ld+json">'. json_encode($schemaJson) .'</script>';
+
+        }
     }
 }

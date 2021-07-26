@@ -64,8 +64,9 @@ class CommentRepository extends RepositoriesAbstract implements CommentInterface
                 'reply_count',
                 'like_count',
                 'parent_id',
-            ]
+            ],
         ];
+
         $count = -1;
 
         if ($parentId === 0 && $page === 1) {
