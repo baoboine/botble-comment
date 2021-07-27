@@ -11,8 +11,8 @@ return [
             'can_off'     => true,
         ],
         'new-comment' => [
-            'title'       => 'plugins/comment::settings.email.templates.to_user.title',
-            'description' => 'plugins/comment::settings.email.templates.to_user.description',
+            'title'       => 'plugins/comment::settings.email.templates.to_poster.title',
+            'description' => 'plugins/comment::settings.email.templates.to_poster.description',
             'subject'     => '{{ site_title }}: New comment to {{ post_name }}',
             'can_off'     => true,
             'enabled'     => false,
