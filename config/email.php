@@ -15,6 +15,7 @@ return [
             'description' => 'plugins/comment::settings.email.templates.to_user.description',
             'subject'     => '{{ site_title }}: New comment to {{ post_name }}',
             'can_off'     => true,
+            'enabled'     => false,
         ],
     ],
     'variables'   => [
