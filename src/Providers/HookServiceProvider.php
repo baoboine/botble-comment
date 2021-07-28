@@ -143,6 +143,9 @@ class HookServiceProvider extends ServiceProvider
 
     protected function addSchemas(&$html)
     {
+
+        if (!setting('plugin_comment_rating', true)) return;
+
         $schemaJson = array (
             '@context' => 'http://schema.org',
             '@type' => 'NewsArticle',
@@ -163,13 +166,15 @@ class HookServiceProvider extends ServiceProvider
                 'description' => $post->description,
                 'name' => $post->name,
                 'image' => RvMedia::getImageUrl($post->image),
-                'aggregateRating' =>
-                    array (
-                        '@type' => 'AggregateRating',
-                        'ratingValue' => $ratingData['rating'],
-                        'reviewCount' => $ratingData['count'],
-                    ),
             ]);
+
+            if ($ratingData['count'] > 0) {
+                $schemaJson['aggregateRating'] = array (
+                    '@type' => 'AggregateRating',
+                    'ratingValue' => $ratingData['rating'],
+                    'reviewCount' => $ratingData['count'],
+                );
+            }
 
             $html .= '<script type="application/ld+json">'. json_encode($schemaJson) .'</script>';
 
