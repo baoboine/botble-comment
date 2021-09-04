@@ -19,6 +19,7 @@ use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\Comment\Forms\CommentForm;
 use Botble\Base\Forms\FormBuilder;
 use Assets;
+use Botble\Base\Supports\Avatar;
 use File;
 
 class CommentController extends BaseController
@@ -223,18 +224,42 @@ class CommentController extends BaseController
 
     public function cloneUser(CloneUserToCommentUser $cloneUserToCommentUser, Request $request, BaseHttpResponse $response)
     {
-        $clonedUser = $cloneUserToCommentUser->handle($request);
+        $guard = $request->input('guard');
+        $guards = collect(config('auth.guards', []))->filter(function ($guard, $key) {
+            return $guard['driver'] == 'session' && $key != 'comments';
+        })->keys()->toArray();
 
-        if (!$clonedUser) {
-            return $response->setError();
+        if ($guard) {
+            if (in_array($guard, $guards)) {
+                $clonedUser = $cloneUserToCommentUser->handle($request, $guard);
+
+                if (!$clonedUser) {
+                    return $response->setError();
+                }
+
+                if (has_passport()) {
+                    return $response->setData(['token' => $clonedUser->createToken('Comment User Login')->accessToken]);
+                }
+
+                auth()->guard(COMMENT_GUARD)->loginUsingId($clonedUser->id);
+
+                return $response->setData(['token' => $clonedUser->id]);
+            } 
+            return $response->setCode(404)->setError();
         }
 
-        if (has_passport()) {
-            return $response->setData(['token' => $clonedUser->createToken('Comment User Login')->accessToken]);
+        $result = collect([]);
+        foreach ($guards as $guard) {
+            if (auth($guard)->check()) {
+                $user = auth($guard)->user();
+                $result[] = [
+                    'key'    => $guard,
+                    'title'  => $user->name,
+                    'avatar' => $user->avatar_url ?: (new Avatar)->create($user->name)->toBase64(),
+                ];
+            }
         }
 
-        auth()->guard(COMMENT_GUARD)->loginUsingId($clonedUser->id);
-
-        return $response->setData(['token' => $clonedUser->id]);
+        return $response->setData($result);
     }
 }

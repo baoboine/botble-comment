@@ -82,17 +82,32 @@
             <div v-html="captcha" />
         </div>
 
-
-        <div class="d-block d-sm-flex justify-content-between align-items-center mt-2" slot="footer" v-if="isRegistering">
-            <div>
-                <a href="javascript:" @click="isRegistering = false" class="small text-right">{{ __('Back to login') }}</a>
+        <div slot="footer">
+            <div class="d-block d-sm-flex justify-content-between align-items-center mt-2" v-if="isRegistering">
+                <div>
+                    <a href="javascript:" @click="isRegistering = false" class="small text-right">{{ __('Back to login') }}</a>
+                </div>
+                <div>
+                    <button class="btn btn-primary" type="submit">{{ __('Sign Up') }}</button>
+                </div>
             </div>
-            <div>
-                <button class="btn btn-primary" type="submit">{{ __('Sign Up') }}</button>
+            <div v-if="loginWithGuards && loginWithGuards.length" class="bb-comment-login-with-guards">
+                <hr>
+                <div class="text-center">
+                    <p>{{ __('Or login with') }}</p>
+                </div>
+                <div class="guards-container">
+                    <div v-for="user in loginWithGuards" :key="user.key" @click="onLoginWithGuard(user)" class="item">
+                        <div class="border rounded px-2 py-2">
+                            <div class="content">
+                                <img :src="user.avatar" :alt="user.title" class="avatar">
+                                <span>{{ user.title }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-
     </modal>
 </template>
 
@@ -122,6 +137,13 @@ export default {
         onClose: {
             type: Function,
             required: true,
+        },
+        loginWithGuards: {
+            type: Array,
+            default: [],
+        },
+        onLoginWithGuard: {
+            type: Function,
         }
     },
     watch: {
