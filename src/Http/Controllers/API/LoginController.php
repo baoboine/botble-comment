@@ -6,6 +6,7 @@ use Botble\ACL\Traits\AuthenticatesUsers;
 use Botble\ACL\Traits\LogoutGuardTrait;
 use Botble\Base\Http\Controllers\BaseController;
 use Botble\Base\Http\Responses\BaseHttpResponse;
+use Botble\Comment\Models\CommentUser;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -89,6 +90,18 @@ class LoginController extends BaseController
         }
 
         return false;
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param Request $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        $data = $request->only($this->username(), 'password');
+        return array_merge($data, ['user_type' => CommentUser::class]);
     }
 
     /**

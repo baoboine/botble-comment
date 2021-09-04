@@ -18,7 +18,7 @@
                         :on-close="() => this.confirmDialogData = null"
         />
 
-        <login-form :show.sync="showLoginForm" :on-close="closeModalLogin"></login-form>
+        <login-form :show.sync="showLoginForm" :on-close="closeModalLogin" :onLoginWithGuard="onLoginWithGuard" :loginWithGuards="loginWithGuards"></login-form>
 
         <div class="bb-comment-footer d-flex justify-content-center" v-if="reactive.attrs">
             <button v-if="reactive.attrs.last_page > reactive.attrs.current_page" @click="loadMoreComments" :class="'btn btn-secondary' + (isLoadMore ? ' button-loading' : '')">{{ __('Load More') }}</button>
@@ -61,6 +61,7 @@ export default {
             confirmDialogData: null,
             showLoginForm: false,
             isSoftLoading: false,
+            loginWithGuards: [],
         };
     },
     components: {
@@ -134,10 +135,28 @@ export default {
     },
     computed: {
         hasRating() {
-            return this.reactive.rating;
+            return !!Object.keys(this.reactive.rating);
         }
     },
     methods: {
+        async onLoginWithGuard(user) {
+            this.setSoftLoading(true);
+            try {
+                const res = await Http.post(this.checkCurrentUserApi + '?guard=' + user.key);
+                this.setSoftLoading(false);
+                this.showLoginForm = false;
+                if (res) {
+                    if (!res.data.error) {
+                        Ls.set('auth.token', res.data.data.token);
+                        await this.getCurrentUserData();
+                    } else {
+                        alert(res.data?.message || 'Error! An error occurred. Please try again later');
+                    }
+                }
+            } catch (e) {
+                this.setSoftLoading(false)
+            }
+        },
         async getCurrentUserData() {
             if (Ls.get('auth.token')) {
                 this.setSoftLoading(true);
@@ -242,7 +261,8 @@ export default {
             }
         },
         openLoginForm() {
-            this.checkCurrentUser(() => {
+            this.checkCurrentUser((data = []) => {
+                this.loginWithGuards = data;
                 this.showLoginForm = true;
             });
         },
@@ -256,11 +276,10 @@ export default {
                 const res = await Http.post(this.checkCurrentUserApi)
                 if (res) {
                     this.setSoftLoading(false);
-                    if (res.data.error) {
-                        cb();
+                    if (!res.data.error) {
+                        cb(res.data.data);
                     } else {
-                        Ls.set('auth.token', res.data.data.token);
-                        await this.getCurrentUserData();
+                        cb();
                     }
                 }
             } catch(e) {

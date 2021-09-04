@@ -4,6 +4,7 @@
 namespace Botble\Comment\Supports;
 
 use Botble\Comment\Repositories\Interfaces\CommentUserInterface;
+use Exception;
 use Illuminate\Http\Request;
 
 
@@ -25,21 +26,30 @@ class CloneUserToCommentUser
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function handle(Request $request)
+    public function handle(Request $request, $guard = null)
     {
-        if ($user = $request->user() ?: (config('auth.guards.member') && auth()->guard('member')->user())) {
-            $user = $this->commentUser->getFirstBy(['email' => $user->email]);
-            if (!$user) {
-                return $this->commentUser->createOrUpdate([
+        try {
+            $user = auth($guard)->check() ? auth($guard)->user() : null;
+        } catch (Exception $ex) {
+            return false;
+        }
+
+        if ($user) {
+            $commentUser = $this->commentUser->getFirstBy([
+                'email'     => $user->email,
+                'user_type' => get_class($user),
+            ]);
+            if (!$commentUser) {
+                $commentUser = $this->commentUser->createOrUpdate([
                     'email'     => $user->email,
                     'password'  => $user->password,
                     'avatar_id' => $user->avatar_id,
                     'user_type' => get_class($user),
-                    'name'      => join(' ', [$user->first_name, $user->last_name]),
+                    'name'      => join(' ', [$user->first_name, $user->last_name]) ?: $user->name ?: $user->email,
                 ]);
             }
 
-            return $user;
+            return $commentUser;
         }
 
         return false;
