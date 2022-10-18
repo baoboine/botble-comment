@@ -35,8 +35,8 @@ if (!function_exists('has_passport')) {
 if (!function_exists('comment_plugin_version')) {
     function comment_plugin_version()
     {
-        $content = get_file_data(plugin_path('comment/plugin.json'));
+        $content = BaseHelper::getFileData(__DIR__ . '/../plugin.json');
 
-        return \Arr::get($content, 'version');
+        return Arr::get($content, 'version');
     }
 }
