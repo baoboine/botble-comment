@@ -18,7 +18,7 @@
 
                     <div class="form-group">
                         <input type="hidden" name="comment_enable" value="0">
-                        <div class="form-check p-0">
+                        <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="comment_enable"
                                    @if (setting('comment_enable')) checked @endif
                                    value="1" id="comment-enable">
@@ -56,7 +56,7 @@
                             <input type="hidden" name="comment_menu_enable[]" value="0" />
 
                             @foreach(SlugHelper::supportedModels() as $model => $name)
-                                <div class="form-check p-0">
+                                <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
                                            @if (in_array($model, $menuEnables)) checked @endif
                                            value="{{ $model }}" name="comment_menu_enable[]" id="{{ $model }}">
